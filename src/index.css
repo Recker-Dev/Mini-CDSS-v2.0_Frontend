@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* must be above tailwind import */
+@import "tailwindcss";
+
+/* Global reset */
+* {
+  box-sizing: border-box;
+}
+
+/* App root */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+/* Base body defaults */
+body {
+  font-family: "Space Mono", monospace, system-ui;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #f8fafc;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+  --color-primary-green: #4a986b;
+  --color-secondary-green: #b7d6c4;
+  --color-tertiary-green: #dbeae1;
+  --color-green-text: #1e3d2b;
+
+  --color-primary-red: #e34549;
+  --color-secondary-red: #f6bbb9;
+  --color-tertiary-red: #fbdddc;
+  --color-red-text: #5d2220;
+
+  --color-primary-blue: #5560e5;
+  --color-secondary-blue: #7068e8;
+
+  --color-primary-bg: #f8fafc;
+  
+  --color-primary-gray: #687181;
+  --color-secondary-gray: #959ca7;
+  --color-gray-text: #959ca7;
+
+  --font-monospace: "Space Mono", monospace, "sans serif"
+
+
+}
