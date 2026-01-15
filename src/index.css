@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* must be above tailwind import */
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"); /* must be above tailwind import */
 @import "tailwindcss";
 
 /* Global reset */
@@ -27,30 +27,32 @@ body {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: slatescale;
 }
 
 @theme {
-  --color-primary-green: #4a986b;
-  --color-secondary-green: #b7d6c4;
-  --color-tertiary-green: #dbeae1;
-  --color-green-text: #1e3d2b;
+  --color-primary-emerald: #34D399; /* emerald-400 */
+  --color-secondary-emerald: #d1fae5;
+  --color-tertiary-emerald: #dbeae1;
+  --color-primary-emerald-text: #34D399; /* emerald-400 */
+  --color-secondary-emerald-text: #047857; /* emerald-700 */
 
-  --color-primary-red: #e34549;
-  --color-secondary-red: #f6bbb9;
-  --color-tertiary-red: #fbdddc;
-  --color-red-text: #5d2220;
+  --color-primary-rose: #e34549; /* rose-500 */
+  --color-secondary-rose: #FFF1F2; /* rose-50 */
+  --color-tertiary-rose: #fbdddc;
+  --color-primary-rose-text: #e34549;
+  --color-secondary-rose-text: #BE123C; /* rose-700 */ 
 
   --color-primary-blue: #5560e5;
   --color-secondary-blue: #7068e8;
+  --color-tertiary-blue: #eeeffc;
 
   --color-primary-bg: #f8fafc;
-  
-  --color-primary-gray: #687181;
-  --color-secondary-gray: #959ca7;
-  --color-gray-text: #959ca7;
 
-  --font-monospace: "Space Mono", monospace, "sans serif"
+  --color-primary-slate: #687181;
+  --color-secondary-slate: #f1f5f9; /*slate-100*/
+  --color-primary-slate-text: #64748b; /*slate-500*/
+  --color-secondary-slate-text: #94a3b8; /*slate-400*/
 
-
+  --font-monospace: "Space Mono", monospace, "sans serif";
 }
