@@ -3,12 +3,13 @@ import { FileText, CirclePlus, Trash, ChevronRight } from "lucide-react";
 import { customScrollbar } from "../../util/scrollbar";
 import PatientDataToggle from "./PatientDataToggle";
 
-export default function PatientDataCard() {
+export default function PatientDataCard({ sessionState }) {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [showEditPanel, setShowEditPanel] = useState(false);
   const [initialPatientData, setInitialPatientData] = useState("Age 50. Male");
   const showEditPanelRef = useRef(null);
+  const [savingChanges, setSavingChanges] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -20,6 +21,8 @@ export default function PatientDataCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const canEdit = sessionState && !savingChanges;
+
   return (
     <section className="p-4 pr-5.5 border-t border-slate-50 ">
       <h3 className="text-xs font-black text-secondary-slate-text uppercase flex items-center justify-between">
@@ -27,15 +30,17 @@ export default function PatientDataCard() {
           <FileText className="w-3.5 h-3.5" /> Patient Data
         </div>
         <button
+          disabled={!canEdit}
           onClick={() => fileInputRef.current?.click()}
-          className="
-              flex items-center justify-center
-              cursor-pointer select-none
-              transition-all duration-200 ease-out
-              text-indigo-600
-              hover:text-indigo-500
-              hover:scale-110
-              active:scale-95"
+          className={`
+          flex items-center justify-center select-none
+          transition-all duration-200 ease-out
+          ${
+            canEdit
+              ? "cursor-pointer text-indigo-600 hover:text-indigo-500 hover:scale-110 active:scale-95"
+              : "cursor-not-allowed text-slate-400 opacity-60"
+          }
+        `}
           aria-label="Add files"
         >
           <CirclePlus className="w-5.5 h-5.5" />
@@ -101,32 +106,77 @@ export default function PatientDataCard() {
         <div ref={showEditPanelRef} className="relative w-full">
           <button
             onClick={() => setShowEditPanel(!showEditPanel)}
-            className="w-full flex justify-between items-center p-2 border text-xs rounded-lg cursor-pointer font-medium
-      bg-secondary-slate/70 border-primary-slate-text/20
-      text-primary-slate-text hover:bg-secondary-slate/90
-      transition-all"
+            className={`
+                w-full flex justify-between items-center p-2 border text-xs rounded-lg
+                font-medium transition-all
+
+                ${
+                  canEdit
+                    ? `
+                      cursor-pointer
+                      bg-secondary-emerald/70
+                      border-primary-emerald-text/20
+                      text-secondary-emerald-text
+                      hover:bg-secondary-emerald/90
+                    `
+                    : `
+                      cursor-pointer
+                      bg-secondary-slate/70
+                      border-primary-slate-text/20
+                      text-primary-slate-text
+                      hover:bg-secondary-slate/90
+                      opacity-80
+                    `
+                }
+              `}
           >
-            <span className="tracking-wide">Initial Patient Data</span>
+            <span className="tracking-tight">
+              Patient Data — {canEdit ? "Editable" : "Read-Only"}
+            </span>
+
             <ChevronRight
-              className="w-4 h-4 text-primary-slate-text opacity-80 hover:text-primary-blue hover:scale-110 active:scale-95
-          "
+              className={`
+                w-4 h-4 transition-all
+                ${
+                  sessionState
+                    ? "text-secondary-emerald-text hover:text-primary-emerald-text hover:scale-110 active:scale-95"
+                    : "text-primary-slate-text opacity-70"
+                }
+              `}
             />
           </button>
-          {showEditPanel && (
-            <PatientDataToggle
-              initialPatientData={initialPatientData}
-              setInitialPatientData={setInitialPatientData}
-            />
-          )}
+
+          <PatientDataToggle
+            canEdit={canEdit}
+            isOpen={showEditPanel}
+            initialPatientData={initialPatientData}
+            setInitialPatientData={setInitialPatientData}
+          />
         </div>
         <button
-          onClick={() => console.log("Syncing up state...")}
-          className=" w-32 h-auto mt-4 ml-32 p-2 border text-xs rounded-lg cursor-pointer font-medium text-center
-      bg-secondary-emerald/70 border-primary-emerald-text/20
-      text-secondary-emerald-text hover:bg-secondary-emerald/90
-      transition-all"
+          disabled={!canEdit}
+          onClick={() => {
+            console.log("Syncing up state...");
+            setSavingChanges(true);
+            setTimeout(() => setSavingChanges(false), 2000);
+          }}
+          className={`
+            w-32 h-auto mt-4 ml-32 p-2 border text-xs rounded-lg
+            font-medium text-center tracking-wide
+            transition-all
+
+            ${
+              canEdit
+                ? "cursor-pointer bg-secondary-emerald/70 border-primary-emerald-text/20 text-secondary-emerald-text hover:bg-secondary-emerald/90"
+                : "cursor-not-allowed bg-slate-200 border-slate-300 text-slate-400 opacity-70"
+            }
+          `}
         >
-          <span className="tracking-wide">Save Changes</span>
+          {sessionState ? (
+            <span>{savingChanges ? "Saving..." : "Save Changes"}</span>
+          ) : (
+            <span>Offline</span>
+          )}
         </button>
       </div>
     </section>

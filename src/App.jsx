@@ -1,15 +1,61 @@
-
+import { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import Header from "./components/Header";
 import LeftPanel from "./components/LeftPanel";
 
-
-
+function RightPanel() {
+  return (
+    <div className="flex-25">
+      <p>Hi</p>
+    </div>
+  );
+}
 
 function App() {
+  const [sessionState, setSessionState] = useState(true);
+  const [leftPanelOpen, setLeftPanelOpen] = useState(false);
+  // spread the same object onto two elements -> Both elements register listeners -> Touch events bubble -> no dintinguish. Thus get 2 handlers.
+  // Define the payload/object first and then get 2 handlers.
+  const closeSwipeConfig = {
+    onSwipedLeft: () => {
+      console.log("Swiped left");
+      setLeftPanelOpen(false);
+    },
+    delta: 75, // minimum swipe distance
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+  };
+  const overlaySwipe = useSwipeable(closeSwipeConfig);
+  const panelSwipe = useSwipeable(closeSwipeConfig);
   return (
     <>
-      <Header />
-      <LeftPanel/>
+      <div className="flex flex-col">
+        <Header
+          sessionState={sessionState}
+          toggleSession={() => {
+            setSessionState(!sessionState);
+          }}
+        />
+        <div className="flex">
+          <LeftPanel
+            sessionState={sessionState}
+            isOpen={leftPanelOpen}
+            togglePanel={() => setLeftPanelOpen(!leftPanelOpen)}
+            swipeHandlers={panelSwipe}
+          />
+          <div className="grow"></div>
+          <RightPanel />
+        </div>
+
+        {/* GLOBAL overlay */}
+        {leftPanelOpen && (
+          <div
+            {...overlaySwipe}
+            className="fixed inset-0 bg-black/25 z-1 lg:hidden"
+            onClick={() => setLeftPanelOpen(false)}
+          />
+        )}
+      </div>
     </>
   );
 }

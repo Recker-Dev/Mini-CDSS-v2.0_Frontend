@@ -2,9 +2,8 @@ import { Activity, X, ChevronDown, UserCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ProfileToggle from "./HeaderComponents/ProfileToggle";
 
-export default function Header() {
+export default function Header({ sessionState, toggleSession }) {
   const [patientId] = useState("882-C");
-  const [sessionState, setSessionState] = useState(true);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
@@ -68,11 +67,11 @@ export default function Header() {
             <span className="hidden sm:inline cursor-pointer">Dr. Admin</span>
             <ChevronDown className="hidden md:block w-4 h-4 text-slate-400" />
           </button>
-          {profileOpen && <ProfileToggle />}
+          <ProfileToggle isOpen={profileOpen} />
         </div>
         {/* Session Button */}
         <button
-          onClick={() => setSessionState(!sessionState)}
+          onClick={() => toggleSession()}
           className={`text-sm font-black text-slate-400 ${
             sessionState
               ? "hover:text-primary-rose-text"
