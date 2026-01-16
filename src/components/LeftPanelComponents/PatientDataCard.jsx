@@ -24,7 +24,7 @@ export default function PatientDataCard({ sessionState }) {
   const canEdit = sessionState && !savingChanges;
 
   return (
-    <section className="p-4 pr-5.5 border-t border-slate-50 ">
+    <div className="p-4 pr-5.5 border-t border-slate-50 ">
       <h3 className="text-xs font-black text-secondary-slate-text uppercase flex items-center justify-between">
         <div className="flex items-center gap-1.5 ">
           <FileText className="w-3.5 h-3.5" /> Patient Data
@@ -153,14 +153,15 @@ export default function PatientDataCard({ sessionState }) {
             setInitialPatientData={setInitialPatientData}
           />
         </div>
-        <button
-          disabled={!canEdit}
-          onClick={() => {
-            console.log("Syncing up state...");
-            setSavingChanges(true);
-            setTimeout(() => setSavingChanges(false), 2000);
-          }}
-          className={`
+        <div className="flex justify-end">
+          <button
+            disabled={!canEdit}
+            onClick={() => {
+              console.log("Syncing up state...");
+              setSavingChanges(true);
+              setTimeout(() => setSavingChanges(false), 2000);
+            }}
+            className={`
             w-32 h-auto mt-4 ml-32 p-2 border text-xs rounded-lg
             font-medium text-center tracking-wide
             transition-all
@@ -171,14 +172,15 @@ export default function PatientDataCard({ sessionState }) {
                 : "cursor-not-allowed bg-slate-200 border-slate-300 text-slate-400 opacity-70"
             }
           `}
-        >
-          {sessionState ? (
-            <span>{savingChanges ? "Saving..." : "Save Changes"}</span>
-          ) : (
-            <span>Offline</span>
-          )}
-        </button>
+          >
+            {sessionState ? (
+              <span>{savingChanges ? "Saving..." : "Save Changes"}</span>
+            ) : (
+              <span>Offline</span>
+            )}
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

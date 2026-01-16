@@ -3,8 +3,7 @@ import { CheckCircle, X } from "lucide-react";
 
 export default function ClinicalObservationCard({ tag, entries }) {
   return (
-    <div className={`flex-1 overflow-y-auto p-4 space-y-6 ${customScrollbar}`}>
-      <section>
+    <div className={`w-full space-y-6 p-2 ${customScrollbar}`}>
         <div className="flex items-center justify-between mb-3">
           <span
             className={`text-sm font-bold ${
@@ -44,7 +43,6 @@ export default function ClinicalObservationCard({ tag, entries }) {
             </div>
           ))}
         </div>
-      </section>
     </div>
   );
 }
