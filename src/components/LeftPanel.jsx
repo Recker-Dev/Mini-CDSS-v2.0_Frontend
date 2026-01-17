@@ -1,7 +1,6 @@
 import ClinicalObservationCard from "./LeftPanelComponents/ClinicalObservationCard";
 import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
 import { customScrollbar } from "../util/scrollbar";
-import { Menu } from "lucide-react";
 
 
 const positives = [
@@ -37,36 +36,26 @@ const negatives = [
 
 export default function LeftPanel({
   sessionState,
-  isOpen,
-  togglePanel,
   swipeHandlers,
 }) {
   return (
     <aside {...swipeHandlers} className="max-w-md max-h-dvh relative ">
-      {/* Menu button */}
-      <button
-        onClick={() => togglePanel(!isOpen)}
-        aria-label="Evidence Board & Patient Data"
-        className="absolute top-3 left-3 p-2 rounded-full bg-white shadow-md lg:hidden"
-      >
-        <Menu className="w-6 h-6 text-primary-blue" />
-      </button>
+
 
       {/*Panel*/}
       {/* w-full in defauly breaks mobile looks and without breaks desktop. */}
       {/* Cannot use overflow or else will break patient data input */}
       <section
         className={`
-          absolute top-0 left-0 z-40 
-          h-full
+          h-screen w-full
           bg-white border-r border-slate-200 shadow-sm
           flex flex-col shrink-0 
-          lg:w-full lg:translate-x-0 lg:static lg:block touch-pan-y
+          lg:w-full lg:static lg:block touch-pan-y
           ${customScrollbar}
-          transform transition-transform duration-300 ease-in-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
-      >
+          `}
+          >
+        {/* transform transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} */}
         {/* 1. Fixed Header */}
         <div
           className="p-4 
@@ -87,7 +76,7 @@ export default function LeftPanel({
         <ClinicalObservationCard tag="Negative" entries={negatives} />
 
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
-        <div className={` flex-45 border-t border-slate-50 bg-white`}>
+        <div className={` flex-45 grow border-t border-slate-50 bg-white`}>
           <PatientDataCard sessionState={sessionState} />
         </div>
       </section>

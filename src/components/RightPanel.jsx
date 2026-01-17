@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PlusCircle, Menu } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { customScrollbar } from "../util/scrollbar";
 
 import SafetyCard from "./RightPanelComponents/SafetyCard";
@@ -39,7 +39,9 @@ function prioritiseDoctorHypotheses(hypotheses) {
   return [...doctor, ...others];
 }
 
-export default function RightPanel({ sessionState, isOpen, togglePanel }) {
+export default function RightPanel({ 
+  sessionState, 
+  swipeHandlers }) {
   const [drHypothesis, setDrHypothesis] = useState("");
   const [drReasoning, setDrReasoning] = useState("");
   const [hypotheses, setHypotheses] = useState(defaultHypotheses);
@@ -63,27 +65,19 @@ export default function RightPanel({ sessionState, isOpen, togglePanel }) {
     setDrReasoning("");
   }
   return (
-    <aside className="max-w-md max-h-dvh relative">
-      {/* Menu button */}
-      <button
-        onClick={() => togglePanel(!isOpen)}
-        // aria-label="Evidence Board & Patient Data"
-        className="fixed top-19 right-15 z-100 p-2 rounded-full bg-white shadow-md lg:hidden"
-      >
-        <Menu className="w-6 h-6 text-primary-blue" />
-      </button>
+    <aside {...swipeHandlers} className="max-w-md max-h-dvh relative">
+
 
       {/* w-[80vw] is for mobile view, it does not hurt grid view in lg */}
       <section
         className={`
-        fixed top-0 left-0 z-40
-        h-full w-[80vw] 
+        h-screen w-full
         bg-white  border-r border-slate-200 shadow-sm 
         flex flex-col gap-4 
         lg:w-full lg:translate-x-0 lg:static lg:block touch-pan-y
         ${customScrollbar}
         transform transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        
         `}
       >
         {/* Heading*/}
@@ -152,7 +146,7 @@ export default function RightPanel({ sessionState, isOpen, togglePanel }) {
           Diagnoses
         </h2>
         <div
-          className={`flex flex-col gap-4 min-h-0 max-h-[48dvh] overflow-y-scroll p-4 ${customScrollbar}`}
+          className={`flex flex-col gap-4 min-h-0 max-h-[42dvh] overflow-y-scroll p-4 ${customScrollbar}`}
         >
           {hypotheses.map((h, i) => (
             <HypothesisCard key={i} hypothesis={h} />

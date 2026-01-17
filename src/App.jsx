@@ -3,24 +3,24 @@ import { useSwipeable } from "react-swipeable";
 import Header from "./components/Header";
 import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
+import SidePanel from "./components/SidePanel";
 
 function App() {
   const [sessionState, setSessionState] = useState(true);
-  const [leftPanelOpen, setLeftPanelOpen] = useState(false);
-  const [rightPanelOpen, setRightPanelOpen] = useState(false);
+  const [panelMode, setPanelMode] = useState("left");
+
   // spread the same object onto two elements -> Both elements register listeners -> Touch events bubble -> no dintinguish. Thus get 2 handlers.
   // Define the payload/object first and then get 2 handlers.
   const closeSwipeConfig = {
-    onSwipedLeft: () => {
-      console.log("Swiped left");
-      setLeftPanelOpen(false);
+    onSwipedRight: () => {
+      setPanelMode(null);
     },
     delta: 75, // minimum swipe distance
     preventScrollOnSwipe: true,
     trackTouch: true,
   };
-  const overlaySwipe = useSwipeable(closeSwipeConfig);
-  const panelSwipe = useSwipeable(closeSwipeConfig);
+  const swipeHandler = useSwipeable(closeSwipeConfig);
+
   return (
     <>
       <div className="flex flex-col">
@@ -30,28 +30,39 @@ function App() {
             setSessionState(!sessionState);
           }}
         />
-        <div className="grid grid-cols-[1fr_1fr_1fr] h-dvh">
-          <LeftPanel
-            sessionState={sessionState}
-            isOpen={leftPanelOpen}
-            togglePanel={() => setLeftPanelOpen(!leftPanelOpen)}
-            swipeHandlers={panelSwipe}
-          />
+
+        {/* Main Content region */}
+        <div className="grid grid-cols-[1fr_2.5fr_1fr] h-dvh">
+          <div className="hidden lg:block">
+            <LeftPanel sessionState={sessionState} />
+          </div>
           <div className=""></div>
-          <RightPanel
-            sessionState={sessionState}
-            isOpen={rightPanelOpen}
-            togglePanel={() => setRightPanelOpen(!rightPanelOpen)}
-          />
+          <div className="hidden lg:block">
+            <RightPanel sessionState={sessionState} />
+          </div>
         </div>
-        {/* GLOBAL overlay */}
-        {leftPanelOpen && (
-          <div
-            {...overlaySwipe}
-            className="fixed inset-0 bg-black/25 z-1 lg:hidden"
-            onClick={() => setLeftPanelOpen(false)}
-          />
-        )}
+
+        {/* Dynamic Dual Mode SidePanels */}
+        <div className="lg:hidden">
+          <SidePanel
+            isOpen={panelMode !== null}
+            onClose={() => setPanelMode(null)}
+            activeTab={panelMode}
+            setActiveTab={setPanelMode}
+            swipeHandler={swipeHandler}
+          >
+            {panelMode === "left" && (
+              <LeftPanel
+                sessionState={sessionState}
+              />
+            )}
+            {panelMode === "right" && (
+              <RightPanel
+                sessionState={sessionState}
+              />
+            )}
+          </SidePanel>
+        </div>
       </div>
     </>
   );
