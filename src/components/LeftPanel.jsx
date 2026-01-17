@@ -3,6 +3,7 @@ import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
 import { customScrollbar } from "../util/scrollbar";
 import { Menu } from "lucide-react";
 
+
 const positives = [
   "Substernal Chest Pain",
   "Smoker (20pk/yr)",
