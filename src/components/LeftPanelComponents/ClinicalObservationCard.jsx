@@ -3,7 +3,10 @@ import { customScrollbar } from "../../util/scrollbar";
 
 export default function ClinicalObservationCard({ tag, entries }) {
   return (
-    <div className={`w-full space-y-6 flex flex-col max-h-[30vh] p-2 `}>
+    <div
+      className={`space-y-6 p-2 
+          flex flex-col`}
+    >
       <div className="flex items-center justify-between mb-3">
         <span
           className={`text-sm font-bold ${
@@ -29,20 +32,24 @@ export default function ClinicalObservationCard({ tag, entries }) {
           {entries.length}
         </span>
       </div>
-      <div className={`flex-1 flex flex-col gap-2 overflow-y-scroll p-2 ${customScrollbar} `}>
-        {entries.map((e, i) => (
-          <div
-            key={i}
-            className={`p-2 border text-xs rounded-lg cursor-pointer select-all font-medium ${
-              tag.toLowerCase() === "positive"
-                ? "bg-secondary-emerald/50 border-emerald-100 text-secondary-emerald-text hover:bg-emerald-100"
-                : "bg-secondary-rose/50 border-rose-100 text-secondary-rose-text hover:bg-rose-100"
-            }  `}
-          >
-            <span>{e}</span>
-          </div>
-        ))}
-      </div>
+      {entries.length > 0 && (
+        <div
+          className={` max-h-[18dvh] min-h-0 flex-1 flex  flex-col gap-2 overflow-y-scroll p-2 ${customScrollbar} `}
+        >
+          {entries.map((e, i) => (
+            <div
+              key={i}
+              className={`p-2 border text-xs rounded-lg cursor-pointer select-all font-medium ${
+                tag.toLowerCase() === "positive"
+                  ? "bg-secondary-emerald/50 border-emerald-100 text-secondary-emerald-text hover:bg-emerald-100"
+                  : "bg-secondary-rose/50 border-rose-100 text-secondary-rose-text hover:bg-rose-100"
+              }  `}
+            >
+              <span>{e}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

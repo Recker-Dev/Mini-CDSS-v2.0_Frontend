@@ -9,7 +9,10 @@ export default function PatientDataToggle({
   return (
     <div
       className={`
-        absolute md:-top-1/2 md:-right-1/2 sm:top-1/2 sm:right-1 transform -translate-y-1/2 translate-x-1/2 mt-3
+        absolute 
+        md:-top-[45%] md:-right-[45%]     
+        sm:top-[40%] sm:right-[5%]
+        transform -translate-y-[60%] translate-x-[50%] mt-3
         w-64 h-84
         md:w-lg md:h-80
         rounded-xl border

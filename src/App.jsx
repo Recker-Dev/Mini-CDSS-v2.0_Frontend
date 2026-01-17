@@ -63,59 +63,68 @@ function RightPanel() {
     setDrReasoning("");
   }
   return (
-    <div className="flex-30 max-w-md">
-      <aside
-        className="h-dvh 
-      bg-white border-l border-slate-200 flex flex-col shadow-sm
-      "
+    <aside className="max-w-md max-h-dvh">
+      <section
+        className="h-full w-full 
+        p-4 
+        bg-white  border-b border-slate-200 shadow-sm 
+        flex flex-col gap-4"
       >
-        <section className="p-4 border-b border-slate-50 flex flex-col h-full overflow-hidden">
-          {/* 1. TOP SECTION: Heading and Form (Fixed height) */}
-          <div className="flex flex-col h-full gap-4 mb-4 shrink-0">
-            <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
-              Reasoning Chain
-            </h2>
+        {/* Heading*/}
 
-            <form onSubmit={addDoctorHypothesis} className="relative">
-              {/* Hypothesis Input */}
-              <input
-                className="w-full bg-slate-50 border border-slate-200  text-primary-slate-text rounded-lg py-2 px-3 text-xs pr-10 outline-none focus:ring-1 focus:ring-indigo-300 mb-3"
-                placeholder="Insert Dr's Hypothesis..."
-                value={drHypothesis}
-                onChange={(e) => setDrHypothesis(e.target.value)}
-              />
-              {/* Reasoning Textarea */}
-              <textarea
-                className="w-full bg-slate-50 border border-slate-200 text-primary-slate-text rounded-lg py-2 px-3 text-xs outline-none focus:ring-1 focus:ring-indigo-300 resize-none"
-                placeholder="Clinical reasoning / logic behind this hypothesis..."
-                rows={5}
-                value={drReasoning}
-                onChange={(e) => setDrReasoning(e.target.value)}
-              />
-              {/* Submit Button */}
-              <button className="absolute right-2 top-1.5 text-primary-blue hover:text-secondary-blue cursor-pointer">
-                <PlusCircle className="w-5 h-5" />
-              </button>
-            </form>
+        <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
+          Reasoning Chain
+        </h2>
 
-            <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
-              Diagnoses
-            </h2>
-            <div
-              className={`flex flex-col gap-4 overflow-y-scroll pr-2 ${customScrollbar}`}
-            >
-              {hypotheses.map((h, i) => (
-                <HypothesisCard key={i} hypothesis={h} />
-              ))}
-            </div>
-            {/* 3. Safety Card stays pinned at the bottom or follows the scroll */}
-            <div className="mt-4 shrink-0">
-              <SafetyCard safetyChecklist={safetyChecklist} />
-            </div>
-          </div>
-        </section>
-      </aside>
-    </div>
+        {/* FORM */}
+        <form onSubmit={addDoctorHypothesis} className="relative">
+          {/* Hypothesis Input */}
+          <input
+            className="w-full 
+            bg-slate-50 border border-slate-200  text-primary-slate-text rounded-lg text-xs
+            py-2 px-3  pr-10 mb-3 
+            outline-none focus:ring-1 focus:ring-indigo-300 "
+            placeholder="Insert Dr's Hypothesis..."
+            value={drHypothesis}
+            onChange={(e) => setDrHypothesis(e.target.value)}
+          />
+          {/* Reasoning Textarea */}
+          <textarea
+            className="w-full 
+            bg-slate-50 border border-slate-200 text-primary-slate-text rounded-lg text-xs 
+            py-2 px-3 
+            outline-none focus:ring-1 focus:ring-indigo-300 resize-none"
+            placeholder="Clinical reasoning / logic behind this hypothesis..."
+            rows={5}
+            value={drReasoning}
+            onChange={(e) => setDrReasoning(e.target.value)}
+          />
+          {/* Submit Button */}
+          <button
+            className="absolute right-2 top-1.5 
+          text-primary-blue hover:text-secondary-blue 
+          cursor-pointer"
+          >
+            <PlusCircle className="w-5 h-5" />
+          </button>
+        </form>
+
+        <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
+          Diagnoses
+        </h2>
+        <div
+          className={`flex flex-col gap-4 min-h-0 max-h-[48dvh] overflow-y-scroll pr-2 ${customScrollbar}`}
+        >
+          {hypotheses.map((h, i) => (
+            <HypothesisCard key={i} hypothesis={h} />
+          ))}
+        </div>
+        {/*Safety Card */}
+        <div className="mt-4">
+          <SafetyCard safetyChecklist={safetyChecklist} />
+        </div>
+      </section>
+    </aside>
   );
 }
 
@@ -141,16 +150,16 @@ function HypothesisCard({ hypothesis }) {
   return (
     <div
       className={`p-4 rounded-xl border transition-all ${
-        hypothesis.source === "Doctor"
+        hypothesis.source === "AI"
           ? "bg-indigo-50/50 border-indigo-200 ring-1 ring-indigo-100"
-          : "bg-white border-slate-100 hover:border-slate-300"
+          : "bg-emerald-50/50 border-slate-200 ring-1 ring-slate-200"
       }`}
     >
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-2">
           <span
             className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase ${
-              hypothesis.source === "Doctor"
+              hypothesis.source === "AI"
                 ? "bg-primary-blue text-white"
                 : "bg-primary-slate text-white"
             }`}
@@ -174,7 +183,7 @@ function HypothesisCard({ hypothesis }) {
         <div className="flex-1 h-1 bg-slate-100 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-1000 ${
-              hypothesis.source === "Doctor"
+              hypothesis.source === "AI"
                 ? "bg-primary-blue"
                 : "bg-primary-emerald"
             }`}
@@ -214,17 +223,16 @@ function App() {
             setSessionState(!sessionState);
           }}
         />
-        <div className="flex max-h-screen">
+        <div className="grid grid-cols-[1fr_1fr_1fr] h-dvh">
           <LeftPanel
             sessionState={sessionState}
             isOpen={leftPanelOpen}
             togglePanel={() => setLeftPanelOpen(!leftPanelOpen)}
             swipeHandlers={panelSwipe}
           />
-          <div className="flex-45"></div>
+          <div className=""></div>
           <RightPanel />
         </div>
-
         {/* GLOBAL overlay */}
         {leftPanelOpen && (
           <div

@@ -31,6 +31,9 @@ const negatives = [
   "No Diaphoresis",
 ];
 
+// const positives = [];
+// const negatives = [];
+
 export default function LeftPanel({
   sessionState,
   isOpen,
@@ -38,10 +41,7 @@ export default function LeftPanel({
   swipeHandlers,
 }) {
   return (
-    <aside
-      {...swipeHandlers}
-      className="flex-20 relative flex  max-w-md max-h-screen"
-    >
+    <aside {...swipeHandlers} className="max-w-md max-h-dvh relative ">
       {/* Menu button */}
       <button
         onClick={() => togglePanel(!isOpen)}
@@ -52,18 +52,26 @@ export default function LeftPanel({
       </button>
 
       {/*Panel*/}
+      {/* w-full in defauly breaks mobile looks and without breaks desktop. */}
+      {/* Cannot use overflow or else will break patient data input */}
       <section
         className={`
-          absolute top-0 left-0 z-40
-          bg-white border-r border-slate-200 flex flex-col h-full shrink-0 shadow-sm
+          absolute top-0 left-0 z-40 
+          h-full
+          bg-white border-r border-slate-200 shadow-sm
+          flex flex-col shrink-0 
+          lg:w-full lg:translate-x-0 lg:static lg:block touch-pan-y
           ${customScrollbar}
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:translate-x-0 lg:static lg:block touch-pan-y
         `}
       >
         {/* 1. Fixed Header */}
-        <div className="p-4 border-b border-slate-50 flex shrink-0 justify-between items-center">
+        <div
+          className="p-4 
+            border-b border-slate-50 
+            flex shrink-0 justify-between items-center"
+            >
           <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
             Evidence Board
           </h2>
@@ -73,21 +81,12 @@ export default function LeftPanel({
           </div>
         </div>
 
-        <div
-          className={` min-h-0 p-2 `}
-        >
-          {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
-          <ClinicalObservationCard tag="Positive" entries={positives} />
-        </div>
-        <div
-          className={` min-h-0 p-2 `}
-        >
-          <ClinicalObservationCard tag="Negative" entries={negatives} />
-        </div>
+        {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
+        <ClinicalObservationCard tag="Positive" entries={positives} />
+        <ClinicalObservationCard tag="Negative" entries={negatives} />
+
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
-        <div
-          className={` min-h-0 border-t border-slate-50 bg-white p2- ${customScrollbar}`}
-        >
+        <div className={` flex-45 border-t border-slate-50 bg-white`}>
           <PatientDataCard sessionState={sessionState} />
         </div>
       </section>

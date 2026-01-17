@@ -24,8 +24,8 @@ export default function PatientDataCard({ sessionState }) {
   const canEdit = sessionState && !savingChanges;
 
   return (
-    <div className="p-4 pr-5.5 border-t border-slate-50 ">
-      <h3 className="text-xs font-black text-secondary-slate-text uppercase flex items-center justify-between">
+    <div className="flex flex-col gap-3 p-4 pr-5.5 border-t border-slate-50 ">
+      <div className="flex items-center justify-between text-xs font-black text-secondary-slate-text uppercase ">
         <div className="flex items-center gap-1.5 ">
           <FileText className="w-3.5 h-3.5" /> Patient Data
         </div>
@@ -33,7 +33,7 @@ export default function PatientDataCard({ sessionState }) {
           disabled={!canEdit}
           onClick={() => fileInputRef.current?.click()}
           className={`
-          flex items-center justify-center select-none
+          select-none
           transition-all duration-200 ease-out
           ${
             canEdit
@@ -45,7 +45,7 @@ export default function PatientDataCard({ sessionState }) {
         >
           <CirclePlus className="w-5.5 h-5.5" />
         </button>
-      </h3>
+      </div>
 
       <input
         // File input but hidden, btn has the reference to trigger click
@@ -72,41 +72,47 @@ export default function PatientDataCard({ sessionState }) {
           e.target.value = ""; // Reset so that same file can be selected again
         }}
       />
-      <div className={`mt-3 flex flex-col gap-2 ${customScrollbar}`}>
-        {files.map((f, i) => (
-          <div
-            key={i}
-            className="flex justify-between p-2 border text-xs rounded-lg cursor-pointer select-all font-medium 
+      {files.length > 0 && (
+        <div
+          className={`flex flex-col max-h-[18dvh] min-h-0 overflow-y-scroll gap-2 p-2 ${customScrollbar}`}
+        >
+          {files.map((f, i) => (
+            <div
+              key={i}
+              className="flex justify-between p-2 border text-xs rounded-lg cursor-pointer select-all font-medium 
                 bg-secondary-slate/50 border-secondary-slate text-primary-slate-text hover:bg-secondary-slate"
-          >
-            {/* Trim the length of filename to 15 chars and keep the extension */}
-            <span title={f.name}>
-              {f.name.length > 20
-                ? `${f.name.substring(0, 15)}...${f.name.substring(
-                    f.name.length - 3,
-                    f.name.length
-                  )}`
-                : f.name}
-            </span>
-            <button
-              onClick={() => {
-                setFiles(files.filter((entry) => entry.name != f.name));
-              }}
             >
-              <Trash
-                className="w-3.5 h-3.5 
+              {/* Trim the length of filename to 15 chars and keep the extension */}
+              <span title={f.name}>
+                {f.name.length > 20
+                  ? `${f.name.substring(0, 15)}...${f.name.substring(
+                      f.name.length - 3,
+                      f.name.length
+                    )}`
+                  : f.name}
+              </span>
+              <button
+                onClick={() => {
+                  setFiles(files.filter((entry) => entry.name != f.name));
+                }}
+              >
+                <Trash
+                  className="w-3.5 h-3.5 
               transition-all duration-200 ease-out 
               hover:text-primary-rose-text hover:scale-110 active:scale-95
               cursor-pointer select-none"
-              />
-            </button>
-          </div>
-        ))}
-        {/* Clinical Encounter Initial Patient Data */}
-        <div ref={showEditPanelRef} className="relative w-full">
-          <button
-            onClick={() => setShowEditPanel(!showEditPanel)}
-            className={`
+                />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      {/* Clinical Encounter Initial Patient Data */}
+      <div ref={showEditPanelRef} className="relative w-full">
+        {/* Initial Patient Data Btn */}
+        <button
+          onClick={() => setShowEditPanel(!showEditPanel)}
+          className={`
                 w-full flex justify-between items-center p-2 border text-xs rounded-lg
                 font-medium transition-all
 
@@ -129,13 +135,13 @@ export default function PatientDataCard({ sessionState }) {
                     `
                 }
               `}
-          >
-            <span className="tracking-tight">
-              Patient Data — {canEdit ? "Editable" : "Read-Only"}
-            </span>
+        >
+          <span className="tracking-tight">
+            Patient Data — {canEdit ? "Editable" : "Read-Only"}
+          </span>
 
-            <ChevronRight
-              className={`
+          <ChevronRight
+            className={`
                 w-4 h-4 transition-all
                 ${
                   sessionState
@@ -143,25 +149,26 @@ export default function PatientDataCard({ sessionState }) {
                     : "text-primary-slate-text opacity-70"
                 }
               `}
-            />
-          </button>
-
-          <PatientDataToggle
-            canEdit={canEdit}
-            isOpen={showEditPanel}
-            initialPatientData={initialPatientData}
-            setInitialPatientData={setInitialPatientData}
           />
-        </div>
-        <div className="flex justify-end">
-          <button
-            disabled={!canEdit}
-            onClick={() => {
-              console.log("Syncing up state...");
-              setSavingChanges(true);
-              setTimeout(() => setSavingChanges(false), 2000);
-            }}
-            className={`
+        </button>
+        {/* Input Box for Patient Data {Transition Rendering} */}
+        <PatientDataToggle
+          canEdit={canEdit}
+          isOpen={showEditPanel}
+          initialPatientData={initialPatientData}
+          setInitialPatientData={setInitialPatientData}
+        />
+      </div>
+      {/* Save button */}
+      <div className="flex justify-end">
+        <button
+          disabled={!canEdit}
+          onClick={() => {
+            console.log("Syncing up state...");
+            setSavingChanges(true);
+            setTimeout(() => setSavingChanges(false), 2000);
+          }}
+          className={`
             w-32 h-auto mt-4 ml-32 p-2 border text-xs rounded-lg
             font-medium text-center tracking-wide
             transition-all
@@ -172,14 +179,13 @@ export default function PatientDataCard({ sessionState }) {
                 : "cursor-not-allowed bg-slate-200 border-slate-300 text-slate-400 opacity-70"
             }
           `}
-          >
-            {sessionState ? (
-              <span>{savingChanges ? "Saving..." : "Save Changes"}</span>
-            ) : (
-              <span>Offline</span>
-            )}
-          </button>
-        </div>
+        >
+          {sessionState ? (
+            <span>{savingChanges ? "Saving..." : "Save Changes"}</span>
+          ) : (
+            <span>Offline</span>
+          )}
+        </button>
       </div>
     </div>
   );
