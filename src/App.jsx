@@ -214,7 +214,7 @@ function App() {
             setSessionState(!sessionState);
           }}
         />
-        <div className="flex">
+        <div className="flex max-h-screen">
           <LeftPanel
             sessionState={sessionState}
             isOpen={leftPanelOpen}
