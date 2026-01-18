@@ -3,13 +3,16 @@ import { FileText, CirclePlus, Trash, ChevronRight } from "lucide-react";
 import { customScrollbar } from "../../util/scrollbar";
 import PatientDataToggle from "./PatientDataToggle";
 
-export default function PatientDataCard({ sessionState }) {
+export default function PatientDataCard({
+  sessionState,
+  savingChanges,
+  setSavingChanges,
+}) {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [showEditPanel, setShowEditPanel] = useState(false);
   const [initialPatientData, setInitialPatientData] = useState("Age 50. Male");
   const showEditPanelRef = useRef(null);
-  const [savingChanges, setSavingChanges] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(e) {

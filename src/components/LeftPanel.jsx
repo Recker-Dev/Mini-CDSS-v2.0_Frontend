@@ -1,31 +1,16 @@
+import { useState } from "react";
 import ClinicalObservationCard from "./LeftPanelComponents/ClinicalObservationCard";
 import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
 import { customScrollbar } from "../util/scrollbar";
 
-const positives = [
+const defaultPositives = [
   "Substernal Chest Pain",
   "Smoker (20pk/yr)",
   "History of HTN",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
-  "Normal Sinus Rhythm",
 ];
 
-const negatives = [
+const defaultNegatives = [
   "No Jaw Radiation",
-  "Negative Troponin",
-  "No Diaphoresis",
-  "Negative Troponin",
-  "No Diaphoresis",
-  "Negative Troponin",
-  "No Diaphoresis",
   "Negative Troponin",
   "No Diaphoresis",
 ];
@@ -34,6 +19,10 @@ const negatives = [
 // const negatives = [];
 
 export default function LeftPanel({ sessionState, swipeHandlers }) {
+  const [savingChanges, setSavingChanges] = useState(false);
+  const [positives, setPositives] = useState(defaultPositives);
+  const [negatives, setNegatives] = useState(defaultNegatives);
+
   return (
     <aside {...swipeHandlers} className="max-w-md h-dvh ">
       <section
@@ -60,16 +49,29 @@ export default function LeftPanel({ sessionState, swipeHandlers }) {
           </div>
         </div>
 
-
         {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
-        <ClinicalObservationCard tag="Positive" entries={positives} />
-        <ClinicalObservationCard tag="Negative" entries={negatives} />
+        <ClinicalObservationCard
+          sessionState={sessionState}
+          tag="Positive"
+          entries={positives}
+          setEntries={setPositives}
+        />
+        <ClinicalObservationCard
+          sessionState={sessionState}
+          tag="Negative"
+          entries={negatives}
+          setEntries={setNegatives}
+        />
 
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
         <div
           className={` max-h-[45dvh] shrink-0 border-t border-slate-50 bg-white`}
         >
-          <PatientDataCard sessionState={sessionState} />
+          <PatientDataCard
+            sessionState={sessionState}
+            savingChanges={savingChanges}
+            setSavingChanges={setSavingChanges}
+          />
         </div>
       </section>
     </aside>
