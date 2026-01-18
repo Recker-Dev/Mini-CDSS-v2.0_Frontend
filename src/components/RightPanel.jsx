@@ -69,7 +69,7 @@ export default function RightPanel({ sessionState, swipeHandlers }) {
     setDrReasoning("");
   }
   return (
-    <aside {...swipeHandlers} className="max-w-md max-h-dvh relative">
+    <aside {...swipeHandlers} className="max-w-md h-dvh">
       <section
         className={`
         h-screen w-full

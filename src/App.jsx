@@ -4,10 +4,11 @@ import Header from "./components/Header";
 import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
 import SidePanel from "./components/SidePanel";
+import ChatPanel from "./components/ChatPanel";
 
 function App() {
   const [sessionState, setSessionState] = useState(true);
-  const [panelMode, setPanelMode] = useState("left");
+  const [panelMode, setPanelMode] = useState(null);
 
   const swipeHandler = useSwipeable({
     onSwipedLeft: () => {
@@ -26,11 +27,18 @@ function App() {
       />
 
       {/* Main Content */}
-      <div className="grid grid-cols-[1fr_2.5fr_1fr] h-[calc(100dvh-64px)]">
+      <div
+        className="
+        h-[calc(100dvh-64px)] w-100dvh
+        grid
+        grid-cols-1  //mobile view
+        lg:grid-cols-[1fr_2.5fr_1fr] //desktop view
+      "
+      >
         <div className="hidden lg:block">
           <LeftPanel sessionState={sessionState} />
         </div>
-        <div />
+        <ChatPanel sessionState={sessionState} />
         <div className="hidden lg:block">
           <RightPanel sessionState={sessionState} />
         </div>

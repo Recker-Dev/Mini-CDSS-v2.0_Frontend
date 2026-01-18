@@ -2,7 +2,6 @@ import ClinicalObservationCard from "./LeftPanelComponents/ClinicalObservationCa
 import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
 import { customScrollbar } from "../util/scrollbar";
 
-
 const positives = [
   "Substernal Chest Pain",
   "Smoker (20pk/yr)",
@@ -34,13 +33,9 @@ const negatives = [
 // const positives = [];
 // const negatives = [];
 
-export default function LeftPanel({
-  sessionState,
-  swipeHandlers,
-}) {
+export default function LeftPanel({ sessionState, swipeHandlers }) {
   return (
-    <aside {...swipeHandlers} className="max-w-md max-h-dvh relative ">
-
+    <aside {...swipeHandlers} className="max-w-md h-dvh ">
       <section
         className={`
           h-screen w-full
@@ -49,14 +44,13 @@ export default function LeftPanel({
           lg:w-full lg:static lg:block touch-pan-y
           ${customScrollbar}
           `}
-          >
-
+      >
         {/* 1. Fixed Header */}
         <div
           className="p-4 
             border-b border-slate-50 
             flex shrink-0 justify-between items-center"
-            >
+        >
           <h2 className="text-xs font-black text-secondary-slate-text uppercase tracking-widest">
             Evidence Board
           </h2>
@@ -66,12 +60,15 @@ export default function LeftPanel({
           </div>
         </div>
 
+
         {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
         <ClinicalObservationCard tag="Positive" entries={positives} />
         <ClinicalObservationCard tag="Negative" entries={negatives} />
 
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
-        <div className={` flex-45 grow border-t border-slate-50 bg-white`}>
+        <div
+          className={` max-h-[45dvh] shrink-0 border-t border-slate-50 bg-white`}
+        >
           <PatientDataCard sessionState={sessionState} />
         </div>
       </section>
