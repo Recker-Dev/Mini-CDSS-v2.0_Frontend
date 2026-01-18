@@ -28,6 +28,12 @@ const defaultHypotheses = [
 const safetyChecklist = [
   "Serial Troponins ordered?",
   "Atypical presentation ruled out?",
+  "Serial Troponins ordered?",
+  "Atypical presentation ruled out?",
+  "Serial Troponins ordered?",
+  "Atypical presentation ruled out?",
+  "Serial Troponins ordered?",
+  "Atypical presentation ruled out?",
 ];
 
 function prioritiseDoctorHypotheses(hypotheses) {
@@ -39,9 +45,7 @@ function prioritiseDoctorHypotheses(hypotheses) {
   return [...doctor, ...others];
 }
 
-export default function RightPanel({ 
-  sessionState, 
-  swipeHandlers }) {
+export default function RightPanel({ sessionState, swipeHandlers }) {
   const [drHypothesis, setDrHypothesis] = useState("");
   const [drReasoning, setDrReasoning] = useState("");
   const [hypotheses, setHypotheses] = useState(defaultHypotheses);
@@ -66,14 +70,11 @@ export default function RightPanel({
   }
   return (
     <aside {...swipeHandlers} className="max-w-md max-h-dvh relative">
-
-
-      {/* w-[80vw] is for mobile view, it does not hurt grid view in lg */}
       <section
         className={`
         h-screen w-full
         bg-white  border-r border-slate-200 shadow-sm 
-        flex flex-col gap-4 
+        flex flex-col gap-2 
         lg:w-full lg:translate-x-0 lg:static lg:block touch-pan-y
         ${customScrollbar}
         transform transition-transform duration-300 ease-in-out
@@ -82,7 +83,7 @@ export default function RightPanel({
       >
         {/* Heading*/}
 
-        <h2 className="p-4 text-xs font-black text-secondary-slate-text uppercase tracking-widest">
+        <h2 className="py-3 px-4 text-xs font-black text-secondary-slate-text uppercase tracking-widest">
           Reasoning Chain
         </h2>
 
@@ -142,7 +143,7 @@ export default function RightPanel({
           </button>
         </form>
 
-        <h2 className="p-4 text-xs font-black text-secondary-slate-text uppercase tracking-widest">
+        <h2 className="px-4 text-xs font-black text-secondary-slate-text uppercase tracking-widest">
           Diagnoses
         </h2>
         <div
@@ -153,7 +154,7 @@ export default function RightPanel({
           ))}
         </div>
         {/*Safety Card */}
-        <div className="mt-4 p-4">
+        <div className="py-2 px-4">
           <SafetyCard safetyChecklist={safetyChecklist} />
         </div>
       </section>

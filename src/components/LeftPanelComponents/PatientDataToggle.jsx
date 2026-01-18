@@ -7,12 +7,37 @@ export default function PatientDataToggle({
   setInitialPatientData,
 }) {
   return (
+    // <div
+    //   className={`
+    //     absolute
+    //     md:-top-[45%] md:-right-[45%]
+    //     sm:top-[40%] sm:right-[5%]
+    //     transform -translate-y-[60%] translate-x-[50%] mt-3
+    //     w-64 h-84
+    //     md:w-lg md:h-80
+    //     rounded-xl border
+    //     bg-secondary-slate/95
+    //     border-primary-slate-text/25
+    //     shadow-xl
+    //     backdrop-blur-sm
+    //     transition-all duration-300 ease-in-out
+    //     ${
+    //       isOpen
+    //         ? "opacity-100 translate-x-0 scale-100 pointer-events-auto"
+    //         : "opacity-0 -translate-x-2 scale-95 pointer-events-none"
+    //     }
+    //     z-50
+    //     overflow-hidden  // Prevents overflow outside the container
+    //   `}
+    // >
     <div
       className={`
         absolute 
-        md:-top-[45%] md:-right-[45%]     
-        sm:top-[40%] sm:right-[5%]
-        transform -translate-y-[60%] translate-x-[50%] mt-3
+        /* Positioning */
+        md:top-0 md:right-0 
+        left-0 
+        
+        /* Box Styling */
         w-64 h-84
         md:w-lg md:h-80
         rounded-xl border
@@ -20,16 +45,23 @@ export default function PatientDataToggle({
         border-primary-slate-text/25
         shadow-xl
         backdrop-blur-sm
+        z-50
+        overflow-hidden
+        
+        /* Animation Logic */
         transition-all duration-300 ease-in-out 
         ${
           isOpen
-            ? "opacity-100 translate-x-0 scale-100 pointer-events-auto"
-            : "opacity-0 -translate-x-2 scale-95 pointer-events-none"
+            ? "opacity-100 scale-100 pointer-events-auto [transform:translateY(-65%)] md:[transform:translateX(55%)]"
+            : "opacity-0 scale-95 pointer-events-none [transform:translateY(-95%)] md:[transform:translateX(-100%)]"
         }
-        z-50
-        overflow-hidden  // Prevents overflow outside the container
       `}
     >
+      {/* ${
+          isOpen
+            ? "opacity-100 translate-x-0 scale-100 pointer-events-auto"
+            : "opacity-0 -translate-x-2 scale-95 pointer-events-none"
+        } */}
       {/* Editable Textarea Section */}
       <textarea
         disabled={!canEdit}

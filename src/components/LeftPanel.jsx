@@ -41,10 +41,6 @@ export default function LeftPanel({
   return (
     <aside {...swipeHandlers} className="max-w-md max-h-dvh relative ">
 
-
-      {/*Panel*/}
-      {/* w-full in defauly breaks mobile looks and without breaks desktop. */}
-      {/* Cannot use overflow or else will break patient data input */}
       <section
         className={`
           h-screen w-full
@@ -54,8 +50,7 @@ export default function LeftPanel({
           ${customScrollbar}
           `}
           >
-        {/* transform transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} */}
+
         {/* 1. Fixed Header */}
         <div
           className="p-4 

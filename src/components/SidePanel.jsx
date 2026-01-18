@@ -1,4 +1,5 @@
 import { HeartPulse, Brain } from "lucide-react";
+import { useSwipeable } from "react-swipeable";
 
 export default function SidePanel({
   isOpen,
@@ -6,11 +7,21 @@ export default function SidePanel({
   children,
   activeTab,
   setActiveTab,
-  swipeHandler,
 }) {
+  const closeSwipeConfig = {
+    onSwipedRight: () => {
+      setActiveTab(null);
+    },
+    delta: 75, // minimum swipe distance
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+  };
+  const swipeHandler = useSwipeable(closeSwipeConfig);
+
   return (
     <>
-      <div {...swipeHandler}
+      <div
+        {...swipeHandler}
         className={`
             fixed top-16 right-0 z-40
             h-[calc(100vh-64px)] w-[80vw] max-w-md
@@ -26,7 +37,7 @@ export default function SidePanel({
         {/* Floating tabs for -> evidence board and reasoning board
             'right-full' pushes the buttons to sit outside the left border
         */}
-        <div className="fixed top-[70%] right-full flex flex-col gap-1 items-end">
+        <div className="absolute top-[60%] right-full flex flex-col gap-1 items-end">
           {/* Evidence Board */}
           <button
             onClick={() => setActiveTab("left")}
