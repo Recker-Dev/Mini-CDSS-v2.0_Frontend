@@ -44,6 +44,7 @@ export default function ClinicalObservationCard({
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (newUserEntry === "") return;
           setEntries((prev) => [...prev, newUserEntry]);
           setNewUserEntry("");
         }}

@@ -15,8 +15,6 @@ const defaultNegatives = [
   "No Diaphoresis",
 ];
 
-// const positives = [];
-// const negatives = [];
 
 export default function LeftPanel({ sessionState, swipeHandlers }) {
   const [savingChanges, setSavingChanges] = useState(false);
