@@ -1,25 +1,23 @@
 import { create } from "zustand";
 
 const useSessionStore = create((set) => ({
-  sessionState: false,
+  sessionState: true,
   setSessionState: (sessionState) => {
     if (typeof sessionState !== "boolean") {
-      throw new Error("sessionState must be a boolean");
+      throw new Error("sessionState accepts only boolean boolean");
     }
     set({ sessionState });
   },
-
-  panelMode: null,
-  setPanelMode: (panelMode) => {
-    if (![null, "left", "right"].includes(panelMode)) {
-      throw new Error(`Invalid panelMode: ${panelMode}`);
+  savingChanges: false,
+  setSavingChanges: (saveStatus) => {
+    if (typeof saveStatus !== "boolean") {
+      throw new Error("savingChanges aceepts only boolean");
     }
-    set({ panelMode });
+    set({ savingChanges: saveStatus });
   },
 
-  activePatientId: null,
+  patientId: "882-C",
   setPatientId: (patientId) => set({ activePatientId: patientId }),
 }));
-
 
 export default useSessionStore;

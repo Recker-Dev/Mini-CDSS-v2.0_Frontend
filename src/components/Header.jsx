@@ -1,9 +1,14 @@
 import { Activity, X, ChevronDown, UserCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import useSessionStore from "../store/useSessionStore";
+import usePatientDataStore from "../store/usePatientDataStore";
 import ProfileToggle from "./HeaderComponents/ProfileToggle";
 
-export default function Header({ sessionState, toggleSession }) {
-  const [patientId] = useState("882-C");
+export default function Header() {
+  const sessionState = useSessionStore((state) => state.sessionState);
+  const setSessionState = useSessionStore((state) => state.setSessionState);
+  const patientId = usePatientDataStore((state) => state.patientId);
+
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
@@ -71,7 +76,7 @@ export default function Header({ sessionState, toggleSession }) {
         </div>
         {/* Session Button */}
         <button
-          onClick={() => toggleSession()}
+          onClick={() => setSessionState(!sessionState)}
           className={`text-sm font-black text-slate-400 ${
             sessionState
               ? "hover:text-primary-rose-text"

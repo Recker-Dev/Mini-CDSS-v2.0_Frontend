@@ -1,0 +1,46 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+const usePatientDataStore = create()(
+  persist(
+    (set, get) => ({
+      patientId: "882-C",
+      setPatientId: (patientId) => set({ activePatientId: patientId }),
+
+      initialPatientData: "Age 50. Male...",
+      setInitialPatientData: (patiendData) =>
+        set({ initialPatientData: patiendData }),
+
+      files: [],
+      addToFiles: (files) => {
+        const newFiles = Array.from(files || []); // ensures files is always an array
+        if (!newFiles.length) return;
+
+        // de-duplication logic: spread the files to array -> make a unique map per file -> remake array
+        set(() => {
+          const map = new Map();
+          [...get().files, ...newFiles].forEach((file) => {
+            const key = `${encodeURIComponent(file.name)}-${file.size}-${file.lastModified}`;
+            map.set(key, file);
+          });
+
+          return { files: Array.from(map.values()) };
+        });
+      },
+      removeFromFiles: (file) =>
+        set({
+          files: get().files.filter((f) => f.name !== file.name),
+        }),
+    }),
+    {
+      name: "patientData-samplePatientId-samepleDocId",
+      // Omits the files -> cuz local storage cant store files
+      partialize: (state) =>
+        Object.fromEntries(
+          Object.entries(state).filter(([key]) => !["files"].includes(key))
+        ),
+    }
+  )
+);
+
+export default usePatientDataStore;

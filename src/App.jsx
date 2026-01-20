@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
+import useSessionStore from "./store/useSessionStore";
 import Header from "./components/Header";
 import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
@@ -7,7 +8,8 @@ import SidePanel from "./components/SidePanel";
 import ChatPanel from "./components/ChatPanel";
 
 function App() {
-  const [sessionState, setSessionState] = useState(true);
+  const sessionState = useSessionStore((state) => state.sessionState);
+
   const [panelMode, setPanelMode] = useState(null);
 
   const swipeHandler = useSwipeable({
@@ -21,11 +23,7 @@ function App() {
 
   return (
     <div {...swipeHandler} className="h-dvh overflow-hidden">
-      <Header
-        sessionState={sessionState}
-        toggleSession={() => setSessionState(!sessionState)}
-      />
-
+      <Header />
       {/* Main Content */}
       <div
         className="
@@ -36,11 +34,11 @@ function App() {
       "
       >
         <div className="hidden lg:block">
-          <LeftPanel sessionState={sessionState} />
+          <LeftPanel />
         </div>
         <ChatPanel sessionState={sessionState} />
         <div className="hidden lg:block">
-          <RightPanel sessionState={sessionState} />
+          <RightPanel />
         </div>
       </div>
 
@@ -52,8 +50,8 @@ function App() {
           activeTab={panelMode}
           setActiveTab={setPanelMode}
         >
-          {panelMode === "left" && <LeftPanel sessionState={sessionState} />}
-          {panelMode === "right" && <RightPanel sessionState={sessionState} />}
+          {panelMode === "left" && <LeftPanel />}
+          {panelMode === "right" && <RightPanel />}
         </SidePanel>
       </div>
     </div>

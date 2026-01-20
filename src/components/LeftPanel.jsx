@@ -1,28 +1,10 @@
-import { useState } from "react";
 import ClinicalObservationCard from "./LeftPanelComponents/ClinicalObservationCard";
 import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
 import { customScrollbar } from "../util/scrollbar";
 
-const defaultPositives = [
-  "Substernal Chest Pain",
-  "Smoker (20pk/yr)",
-  "History of HTN",
-];
-
-const defaultNegatives = [
-  "No Jaw Radiation",
-  "Negative Troponin",
-  "No Diaphoresis",
-];
-
-
-export default function LeftPanel({ sessionState, swipeHandlers }) {
-  const [savingChanges, setSavingChanges] = useState(false);
-  const [positives, setPositives] = useState(defaultPositives);
-  const [negatives, setNegatives] = useState(defaultNegatives);
-
+export default function LeftPanel() {
   return (
-    <aside {...swipeHandlers} className="max-w-md h-dvh ">
+    <aside className="max-w-md h-dvh ">
       <section
         className={`
           h-screen w-full
@@ -48,28 +30,15 @@ export default function LeftPanel({ sessionState, swipeHandlers }) {
         </div>
 
         {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
-        <ClinicalObservationCard
-          sessionState={sessionState}
-          tag="Positive"
-          entries={positives}
-          setEntries={setPositives}
-        />
-        <ClinicalObservationCard
-          sessionState={sessionState}
-          tag="Negative"
-          entries={negatives}
-          setEntries={setNegatives}
-        />
+        {/* Spell-check warning here */} 
+        <ClinicalObservationCard tag="Positive" />
+        <ClinicalObservationCard tag="Negative" />
 
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
         <div
           className={` max-h-[45dvh] shrink-0 border-t border-slate-50 bg-white`}
         >
-          <PatientDataCard
-            sessionState={sessionState}
-            savingChanges={savingChanges}
-            setSavingChanges={setSavingChanges}
-          />
+          <PatientDataCard />
         </div>
       </section>
     </aside>

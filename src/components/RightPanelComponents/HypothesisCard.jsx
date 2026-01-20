@@ -1,6 +1,16 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Trash } from "lucide-react";
+import useSessionStore from "../../store/useSessionStore";
+import useReasoningStore from "../../store/useReasoningStore";
 
 export default function HypothesisCard({ hypothesis }) {
+  const sessionState = useSessionStore((state) => state.sessionState);
+  const savingChanges = useSessionStore((state) => state.savingChanges);
+
+  const removeFromHypotheses = useReasoningStore(
+    (state) => state.removeFromHypotheses
+  );
+
+  const canEdit = sessionState && !savingChanges;
   return (
     <div
       className={`p-4 rounded-xl border transition-all ${
@@ -46,6 +56,20 @@ export default function HypothesisCard({ hypothesis }) {
         </div>
         <button className="p-1 hover:bg-slate-100 rounded transition-colors text-primary-slate-text cursor-pointer">
           <ArrowUpRight className="w-3.5 h-3.5" />
+        </button>
+        <button
+          disabled={!canEdit}
+          onClick={() => removeFromHypotheses(hypothesis.id)}
+          className={`${!canEdit ? "cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          <Trash
+            className={`w-3.5 h-3.5 transition-all duration-200 ease-out select-none
+                  ${
+                    canEdit
+                      ? "text-primary-rose-text hover:scale-110 active:scale-95 opacity-100"
+                      : "text-primary-slate-text opacity-50 grayscale"
+                  }`}
+          />
         </button>
       </div>
     </div>

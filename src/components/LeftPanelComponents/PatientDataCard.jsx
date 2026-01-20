@@ -1,22 +1,30 @@
 import { useState, useRef, useEffect } from "react";
 import { FileText, CirclePlus, Trash, ChevronRight } from "lucide-react";
 import { customScrollbar } from "../../util/scrollbar";
+import usePatientDataStore from "../../store/usePatientDataStore";
 import PatientDataToggle from "./PatientDataToggle";
+import useSessionStore from "../../store/useSessionStore";
 
-export default function PatientDataCard({
-  sessionState,
-  savingChanges,
-  setSavingChanges,
-}) {
+export default function PatientDataCard() {
+  const sessionState = useSessionStore((state) => state.sessionState);
+  const savingChanges = useSessionStore((state) => state.savingChanges);
+  const setSavingChanges = useSessionStore((state) => state.setSavingChanges);
+
+  const files = usePatientDataStore((state) => state.files);
+  const addToFiles = usePatientDataStore((state) => state.addToFiles);
+  const removeFromFiles = usePatientDataStore((state) => state.removeFromFiles);
+
   const fileInputRef = useRef(null);
-  const [files, setFiles] = useState([]);
   const [showEditPanel, setShowEditPanel] = useState(false);
-  const [initialPatientData, setInitialPatientData] = useState("Age 50. Male");
-  const showEditPanelRef = useRef(null);
+  const showPatientDataRef = useRef(null);
+
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (showEditPanelRef && !showEditPanelRef.current.contains(e.target)) {
+      if (
+        showPatientDataRef &&
+        !showPatientDataRef.current.contains(e.target)
+      ) {
         setShowEditPanel(false);
       }
     }
@@ -58,20 +66,7 @@ export default function PatientDataCard({
         ref={fileInputRef}
         multiple
         onChange={(e) => {
-          const newFiles = Array.from(e.target.files || []);
-          if (newFiles && newFiles.length > 0) {
-            setFiles((prevFiles) => {
-              const map = new Map();
-              [...prevFiles, ...newFiles].forEach((file) => {
-                // de-duplication logic: spread the files to array -> make a unique map per file -> remake array
-                const key = `${file.name}-${file.size}-${file.lastModified}`;
-                map.set(key, file);
-              });
-              return Array.from(map.values());
-            });
-            console.log("Selected newFiles:", newFiles);
-            console.log("Net files:", files);
-          }
+          addToFiles(e.target.files);
           e.target.value = ""; // Reset so that same file can be selected again
         }}
       />
@@ -96,7 +91,7 @@ export default function PatientDataCard({
               </span>
               <button
                 onClick={() => {
-                  setFiles(files.filter((entry) => entry.name != f.name));
+                  removeFromFiles(f);
                 }}
               >
                 <Trash
@@ -111,7 +106,7 @@ export default function PatientDataCard({
         </div>
       )}
       {/* Clinical Encounter Initial Patient Data */}
-      <div ref={showEditPanelRef} className="relative w-full">
+      <div ref={showPatientDataRef} className="relative w-full">
         {/* Initial Patient Data Btn */}
         <button
           onClick={() => setShowEditPanel(!showEditPanel)}
@@ -155,12 +150,7 @@ export default function PatientDataCard({
           />
         </button>
         {/* Input Box for Patient Data {Transition Rendering} */}
-        <PatientDataToggle
-          canEdit={canEdit}
-          isOpen={showEditPanel}
-          initialPatientData={initialPatientData}
-          setInitialPatientData={setInitialPatientData}
-        />
+        <PatientDataToggle canEdit={canEdit} isOpen={showEditPanel} />
       </div>
       {/* Save button */}
       <div className="flex justify-end">

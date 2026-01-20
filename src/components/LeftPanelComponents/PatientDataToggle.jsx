@@ -1,11 +1,14 @@
 import { customScrollbar } from "../../util/scrollbar";
+import usePatientDataStore from "../../store/usePatientDataStore";
 
-export default function PatientDataToggle({
-  canEdit,
-  isOpen,
-  initialPatientData,
-  setInitialPatientData,
-}) {
+export default function PatientDataToggle({ canEdit, isOpen }) {
+  const initialPatientData = usePatientDataStore(
+    (state) => state.initialPatientData
+  );
+  const setInitialPatientData = usePatientDataStore(
+    (state) => state.setInitialPatientData
+  );
+
   return (
     // <div
     //   className={`

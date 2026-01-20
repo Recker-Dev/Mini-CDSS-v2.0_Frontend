@@ -1,75 +1,31 @@
 import { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { customScrollbar } from "../util/scrollbar";
+import useSessionStore from "../store/useSessionStore";
 
 import SafetyCard from "./RightPanelComponents/SafetyCard";
 import HypothesisCard from "./RightPanelComponents/HypothesisCard";
+import useReasoningStore from "../store/useReasoningStore";
 
-const defaultHypotheses = [
-  {
-    id: 1,
-    disease: "GERD",
-    probability: 0.65,
-    status: "suspected",
-    source: "AI",
-    reasoning:
-      "Post-prandial timing and substernal location match typical reflux.",
-  },
-  {
-    id: 2,
-    disease: "Stable Angina",
-    probability: 0.25,
-    status: "possible",
-    source: "AI",
-    reasoning: "Age and smoking status increase pre-test probability.",
-  },
-];
+export default function RightPanel() {
+  const sessionState = useSessionStore((state) => state.sessionState);
+  const hypotheses = useReasoningStore((state) => state.hypotheses);
+  const addToHypotheses = useReasoningStore((state) => state.addToHypotheses);
 
-const safetyChecklist = [
-  "Serial Troponins ordered?",
-  "Atypical presentation ruled out?",
-  "Serial Troponins ordered?",
-  "Atypical presentation ruled out?",
-  "Serial Troponins ordered?",
-  "Atypical presentation ruled out?",
-  "Serial Troponins ordered?",
-  "Atypical presentation ruled out?",
-];
-
-function prioritiseDoctorHypotheses(hypotheses) {
-  const doctor = [];
-  const others = [];
-  for (const h of hypotheses) {
-    (h.source === "Doctor" ? doctor : others).push(h);
-  }
-  return [...doctor, ...others];
-}
-
-export default function RightPanel({ sessionState, swipeHandlers }) {
   const [drHypothesis, setDrHypothesis] = useState("");
   const [drReasoning, setDrReasoning] = useState("");
-  const [hypotheses, setHypotheses] = useState(defaultHypotheses);
 
   function addDoctorHypothesis(e) {
     e.preventDefault();
-    setHypotheses((prev) =>
-      prioritiseDoctorHypotheses([
-        ...prev,
-        {
-          id: prev.length,
-          disease: drHypothesis,
-          probability: Math.random(),
-          status: "possible",
-          source: "Doctor",
-          reasoning: drReasoning,
-        },
-      ])
-    );
+    addToHypotheses({
+      disease: drHypothesis,
+      reasoning: drReasoning,
+    });
     setDrHypothesis("");
     setDrReasoning("");
   }
   return (
-    <aside {...swipeHandlers} className="max-w-md h-dvh">
+    <aside className="max-w-md h-dvh">
       <section
         className={`
         h-screen w-full
@@ -107,6 +63,12 @@ export default function RightPanel({ sessionState, swipeHandlers }) {
           {/* Reasoning Textarea */}
           <textarea
             disabled={!sessionState}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                e.currentTarget.form?.requestSubmit();
+              }
+            }}
             className="w-full 
             bg-slate-50 border border-slate-200 text-primary-slate-text rounded-lg text-xs 
             py-2 px-3 
@@ -146,16 +108,22 @@ export default function RightPanel({ sessionState, swipeHandlers }) {
         <h2 className="px-4 text-xs font-black text-secondary-slate-text uppercase tracking-widest">
           Diagnoses
         </h2>
-        <div
-          className={`flex flex-col gap-4 min-h-0 max-h-[42dvh] overflow-y-scroll p-4 ${customScrollbar}`}
-        >
-          {hypotheses.map((h, i) => (
-            <HypothesisCard key={i} hypothesis={h} />
-          ))}
-        </div>
+        {hypotheses.length > 0 ? (
+          <div
+            className={`flex flex-col gap-4 min-h-0 max-h-[42dvh] overflow-y-scroll p-4 ${customScrollbar}`}
+          >
+            {hypotheses.map((h, i) => (
+              <HypothesisCard key={i} hypothesis={h} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-primary-slate-text tracking-wide p-4">
+            Possible diagnoses will populate here as the evaluation progresses.
+          </p>
+        )}
         {/*Safety Card */}
         <div className="py-2 px-4">
-          <SafetyCard safetyChecklist={safetyChecklist} />
+          <SafetyCard />
         </div>
       </section>
     </aside>
