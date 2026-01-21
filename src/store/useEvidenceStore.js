@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const defaultPositives = [
   "Substernal Chest Pain",
@@ -37,7 +37,7 @@ const useEvidenceStore = create()(
       addToEvidence: (evidenceType, value) => {
         if (!["positive", "negative"].includes(evidenceType)) {
           throw new Error(
-            "evidenceType must be either 'positive' or 'negative'"
+            "evidenceType must be either 'positive' or 'negative'",
           );
         }
         set({
@@ -50,23 +50,24 @@ const useEvidenceStore = create()(
       removeFromEvidence: (evidenceType, evidenceIndex) => {
         if (!["positive", "negative"].includes(evidenceType)) {
           throw new Error(
-            "evidenceType must be either 'positive' or 'negative'"
+            "evidenceType must be either 'positive' or 'negative'",
           );
         }
         set({
           evidence: {
             ...get().evidence,
             [evidenceType]: get().evidence[evidenceType].filter(
-              (_, index) => index !== evidenceIndex
+              (_, index) => index !== evidenceIndex,
             ),
           },
         });
       },
     }),
     {
-      name: "evidence-samplePatientId-samepleDocId",
-    }
-  )
+      name: "evidenceStore-samplePatientId-samepleDocId",
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
 );
 
 export default useEvidenceStore;

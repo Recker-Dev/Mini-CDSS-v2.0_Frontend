@@ -6,6 +6,7 @@ import LeftPanel from "./components/LeftPanel";
 import RightPanel from "./components/RightPanel";
 import SidePanel from "./components/SidePanel";
 import ChatPanel from "./components/ChatPanel";
+import useAutoSync from "./hooks/useAutoSync";
 
 function App() {
   const sessionState = useSessionStore((state) => state.sessionState);
@@ -20,6 +21,8 @@ function App() {
     preventScrollOnSwipe: true,
     trackTouch: true,
   });
+
+  useAutoSync(2);
 
   return (
     <div {...swipeHandler} className="h-dvh overflow-hidden">

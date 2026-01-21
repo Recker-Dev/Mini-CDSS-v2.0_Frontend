@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const usePatientDataStore = create()(
   persist(
@@ -33,14 +33,16 @@ const usePatientDataStore = create()(
         }),
     }),
     {
-      name: "patientData-samplePatientId-samepleDocId",
+      name: "patientDataStore-samplePatientId-samepleDocId",
+      storage: createJSONStorage(() => sessionStorage),
+
       // Omits the files -> cuz local storage cant store files
       partialize: (state) =>
         Object.fromEntries(
-          Object.entries(state).filter(([key]) => !["files"].includes(key))
+          Object.entries(state).filter(([key]) => !["files"].includes(key)),
         ),
-    }
-  )
+    },
+  ),
 );
 
 export default usePatientDataStore;

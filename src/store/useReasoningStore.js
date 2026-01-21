@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const defaultHypotheses = [
   {
@@ -45,43 +46,53 @@ function prioritiseDoctorHypotheses(hypotheses) {
   ];
 }
 
-const useReasoningStore = create((set) => ({
-  hypotheses: defaultHypotheses || [],
+const useReasoningStore = create()(
+  persist(
+    (set, get) => ({
+      hypotheses: defaultHypotheses || [],
 
-  setHypotheses: (newHypothesisArray) =>
-    set({
-      hypotheses: Array.isArray(newHypothesisArray) ? newHypothesisArray : [],
+      setHypotheses: (newHypothesisArray) =>
+        set({
+          hypotheses: Array.isArray(newHypothesisArray)
+            ? newHypothesisArray
+            : [],
+        }),
+
+      addToHypotheses: (newHypothesisObject) => {
+        set({
+          hypotheses: prioritiseDoctorHypotheses([
+            ...get().hypotheses,
+            {
+              id: crypto.randomUUID(),
+              disease: newHypothesisObject.disease,
+              timestamp: Date.now(),
+              probability: Math.random(),
+              status: "possible",
+              source: "Doctor",
+              reasoning: newHypothesisObject.reasoning,
+            },
+          ]),
+        });
+      },
+
+      removeFromHypotheses: (hypothesisId) => {
+        set({
+          hypotheses: get().hypotheses.filter((h) => h.id !== hypothesisId),
+        });
+      },
+
+      safetyChecklist: defaultSafetyChecklist || [],
+      setSafetyChecklist: (newSafetyArray) => {
+        set({
+          safetyChecklist: Array.isArray(newSafetyArray) ? newSafetyArray : [],
+        });
+      },
     }),
-
-  addToHypotheses: (newHypothesisObject) => {
-    set((state) => ({
-      hypotheses: prioritiseDoctorHypotheses([
-        ...state.hypotheses,
-        {
-          id: crypto.randomUUID(),
-          disease: newHypothesisObject.disease,
-          timestamp: Date.now(),
-          probability: Math.random(),
-          status: "possible",
-          source: "Doctor",
-          reasoning: newHypothesisObject.reasoning,
-        },
-      ]),
-    }));
-  },
-
-  removeFromHypotheses: (hypothesisId) => {
-    set((state) => ({
-      hypotheses: state.hypotheses.filter((h) => h.id !== hypothesisId),
-    }));
-  },
-
-  safetyChecklist: defaultSafetyChecklist || [] ,
-  setSafetyChecklist: (newSafetyArray) => {
-    set({
-      safetyChecklist: Array.isArray(newSafetyArray) ? newSafetyArray : [],
-    });
-  },
-}));
+    {
+      name: "reasoningStore-samplePatientId-samepleDocId",
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);
 
 export default useReasoningStore;

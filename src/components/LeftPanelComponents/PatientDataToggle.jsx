@@ -3,10 +3,10 @@ import usePatientDataStore from "../../store/usePatientDataStore";
 
 export default function PatientDataToggle({ canEdit, isOpen }) {
   const initialPatientData = usePatientDataStore(
-    (state) => state.initialPatientData
+    (state) => state.initialPatientData,
   );
   const setInitialPatientData = usePatientDataStore(
-    (state) => state.setInitialPatientData
+    (state) => state.setInitialPatientData,
   );
 
   return (
