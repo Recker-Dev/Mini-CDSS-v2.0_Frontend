@@ -33,6 +33,9 @@ export default function useAutoSync(interval) {
       // Compare the current vs last changes
       const changes = {};
 
+      // Zustand ensures immutability and working with JS generally
+      // we tend to do so also; so checking object reference will get out job done.
+
       if (initialPatientData !== lastState.initialPatientData) {
         changes.initialPatientData = initialPatientData;
       }
@@ -40,15 +43,15 @@ export default function useAutoSync(interval) {
         changes.files = files;
       }
 
-      if (positiveEvidences.length !== lastState.positiveEvidences.length) {
+      if (positiveEvidences !== lastState.positiveEvidences) {
         changes.positiveEvidences = positiveEvidences;
       }
 
-      if (negativeEvidences.length !== lastState.negativeEvidences.length) {
+      if (negativeEvidences !== lastState.negativeEvidences) {
         changes.negativeEvidences = negativeEvidences;
       }
 
-      if (hypotheses.length !== lastState.hypotheses.length) {
+      if (hypotheses !== lastState.hypotheses) {
         changes.hypotheses = hypotheses;
       }
 

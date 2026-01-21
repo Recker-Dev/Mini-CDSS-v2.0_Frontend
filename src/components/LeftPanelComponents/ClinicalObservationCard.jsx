@@ -9,11 +9,11 @@ export default function ClinicalObservationCard({ tag }) {
   const savingChanges = useSessionStore((state) => state.savingChanges);
 
   const entries = useEvidenceStore(
-    (state) => state.evidence[tag.toLowerCase()]
+    (state) => state.evidence[tag.toLowerCase()],
   );
   const addToEvidence = useEvidenceStore((state) => state.addToEvidence);
   const removeFromEvidence = useEvidenceStore(
-    (state) => state.removeFromEvidence
+    (state) => state.removeFromEvidence,
   );
 
   const [newUserEntry, setNewUserEntry] = useState("");
@@ -101,7 +101,7 @@ export default function ClinicalObservationCard({ tag }) {
       </form>
       {entries.length > 0 && (
         <div
-          className={`max-h-[18dvh] min-h-0 flex-1 flex flex-col gap-2 overflow-y-scroll p-2 ${customScrollbar}`}
+          className={`max-h-[16dvh] min-h-0 flex-1 flex flex-col gap-2 overflow-y-scroll p-2 ${customScrollbar}`}
         >
           {entries.map((e, entryIndex) => (
             <div key={entryIndex} className="flex items-center gap-2 w-full">
