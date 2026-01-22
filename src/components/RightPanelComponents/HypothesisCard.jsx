@@ -14,7 +14,7 @@ export default function HypothesisCard({ hypothesis }) {
   return (
     <div
       className={`p-4 rounded-xl border transition-all ${
-        hypothesis.source === "AI"
+        hypothesis.source === "Doctor"
           ? "bg-indigo-50/50 border-indigo-200 ring-1 ring-indigo-100"
           : "bg-emerald-50/50 border-slate-200 ring-1 ring-slate-200"
       }`}
@@ -23,7 +23,7 @@ export default function HypothesisCard({ hypothesis }) {
         <div className="flex items-center gap-2">
           <span
             className={`text-[8px] font-black px-1.5 py-0.5 rounded uppercase ${
-              hypothesis.source === "AI"
+              hypothesis.source === "Doctor"
                 ? "bg-primary-blue text-white"
                 : "bg-primary-slate text-white"
             }`}
@@ -47,7 +47,7 @@ export default function HypothesisCard({ hypothesis }) {
         <div className="flex-1 h-1 bg-slate-100 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-1000 ${
-              hypothesis.source === "AI"
+              hypothesis.source === "Doctor"
                 ? "bg-primary-blue"
                 : "bg-primary-emerald"
             }`}

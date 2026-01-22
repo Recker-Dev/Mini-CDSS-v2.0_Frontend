@@ -1,6 +1,6 @@
-import ClinicalObservationCard from "./LeftPanelComponents/ClinicalObservationCard";
-import PatientDataCard from "./LeftPanelComponents/PatientDataCard";
-import { customScrollbar } from "../util/scrollbar";
+import ClinicalObservationCard from "../../LeftPanelComponents/ClinicalObservationCard";
+import PatientDataCard from "../../LeftPanelComponents/PatientDataCard";
+import { customScrollbar } from "../../../util/scrollbar";
 
 export default function LeftPanel() {
   return (

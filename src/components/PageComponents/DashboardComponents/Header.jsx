@@ -1,8 +1,8 @@
 import { Activity, X, ChevronDown, UserCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import useSessionStore from "../store/useSessionStore";
-import usePatientDataStore from "../store/usePatientDataStore";
-import ProfileToggle from "./HeaderComponents/ProfileToggle";
+import useSessionStore from "../../../store/useSessionStore";
+import usePatientDataStore from "../../../store/usePatientDataStore";
+import ProfileToggle from "../../HeaderComponents/ProfileToggle";
 
 export default function Header() {
   const sessionState = useSessionStore((state) => state.sessionState);

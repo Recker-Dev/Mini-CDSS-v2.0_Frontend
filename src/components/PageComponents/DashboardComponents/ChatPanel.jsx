@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Send } from "lucide-react";
-import { customScrollbar } from "../util/scrollbar";
+import { customScrollbar } from "../../../util/scrollbar";
 
 const defaultAIChat = {
   id: 1,

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { PlusCircle } from "lucide-react";
-import { customScrollbar } from "../util/scrollbar";
-import useSessionStore from "../store/useSessionStore";
+import { customScrollbar } from "../../../util/scrollbar";
+import useSessionStore from "../../../store/useSessionStore";
 
-import SafetyCard from "./RightPanelComponents/SafetyCard";
-import HypothesisCard from "./RightPanelComponents/HypothesisCard";
-import useReasoningStore from "../store/useReasoningStore";
+import SafetyCard from "../../RightPanelComponents/SafetyCard";
+import HypothesisCard from "../../RightPanelComponents/HypothesisCard";
+import useReasoningStore from "../../../store/useReasoningStore";
 
 export default function RightPanel() {
   const sessionState = useSessionStore((state) => state.sessionState);
