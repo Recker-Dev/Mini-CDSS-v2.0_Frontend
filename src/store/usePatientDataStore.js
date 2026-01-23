@@ -5,11 +5,15 @@ const usePatientDataStore = create()(
   persist(
     (set, get) => ({
       patientId: "882-C",
-      setPatientId: (patientId) => set({ activePatientId: patientId }),
+      setPatientId: (patientId) => set({ patientId }),
 
-      initialPatientData: "Age 50. Male...",
-      setInitialPatientData: (patiendData) =>
-        set({ initialPatientData: patiendData }),
+      patientData: {},
+      setPatientData: (patientData) =>
+        set({ initialPatientData: patientData }),
+
+      patientNotes: "Age 50. Male...",
+      setpatientNotes: (patiendData) =>
+        set({ patientNotes: patiendData }),
 
       files: [],
       addToFiles: (files) => {

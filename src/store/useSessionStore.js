@@ -16,8 +16,6 @@ const useSessionStore = create((set) => ({
     set({ savingChanges: saveStatus });
   },
 
-  patientId: "882-C",
-  setPatientId: (patientId) => set({ activePatientId: patientId }),
 }));
 
 export default useSessionStore;

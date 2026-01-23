@@ -4,8 +4,8 @@ import useEvidenceStore from "../store/useEvidenceStore.js";
 import useReasoningStore from "../store/useReasoningStore.js";
 
 export default function useAutoSync(interval) {
-  const initialPatientData = usePatientDataStore(
-    (state) => state.initialPatientData,
+  const patientNotes = usePatientDataStore(
+    (state) => state.patientNotes,
   );
   const files = usePatientDataStore((state) => state.files);
 
@@ -19,7 +19,7 @@ export default function useAutoSync(interval) {
   const hypotheses = useReasoningStore((state) => state.hypotheses);
 
   const lastSyncedRef = useRef({
-    initialPatientData,
+    patientNotes,
     files,
     positiveEvidences: positiveEvidences || [],
     negativeEvidences: negativeEvidences || [],
@@ -36,8 +36,8 @@ export default function useAutoSync(interval) {
       // Zustand ensures immutability and working with JS generally
       // we tend to do so also; so checking object reference will get out job done.
 
-      if (initialPatientData !== lastState.initialPatientData) {
-        changes.initialPatientData = initialPatientData;
+      if (patientNotes !== lastState.patientNotes) {
+        changes.patientNotes = patientNotes;
       }
       if (files !== lastState.files) {
         changes.files = files;
@@ -60,7 +60,7 @@ export default function useAutoSync(interval) {
         console.log("API call with changes:", changes);
 
         lastSyncedRef.current = {
-          initialPatientData,
+          patientNotes,
           files,
           positiveEvidences,
           negativeEvidences,
@@ -71,7 +71,7 @@ export default function useAutoSync(interval) {
 
     return () => clearTimeout(timeoutId);
   }, [
-    initialPatientData,
+    patientNotes,
     files,
     positiveEvidences,
     negativeEvidences,

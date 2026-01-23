@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
+import { useParams, useLocation } from "react-router-dom";
 import useSessionStore from "../store/useSessionStore";
 import useAutoSync from "../hooks/useAutoSync";
 import Header from "../components/PageComponents/DashboardComponents/Header";
@@ -9,6 +10,15 @@ import ChatPanel from "../components/PageComponents/DashboardComponents/ChatPane
 import SidePanel from "../components/PageComponents/DashboardComponents/SidePanel";
 
 function Dashboard() {
+  const { patientId, doctorId, sessionId } = useParams();
+  const location = useLocation();
+
+  console.log("patientId:", patientId);
+  console.log("doctorId:", doctorId);
+  console.log("sessionId:", sessionId);
+  console.log("router state:", location.state);
+
+
   const sessionState = useSessionStore((state) => state.sessionState);
 
   const [panelMode, setPanelMode] = useState(null);
