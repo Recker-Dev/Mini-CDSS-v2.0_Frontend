@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Activity, ChevronRight, FileText } from "lucide-react";
 import usePatientDataStore from "../store/usePatientDataStore";
+import { createNewSession } from "../services/session";
+import { toast } from "react-hot-toast";
 
 function Intake() {
   const navigate = useNavigate();
+  const { doctorId } = useParams();
 
   const setpatientNotes = usePatientDataStore((state) => state.setpatientNotes);
   const setPatientData = usePatientDataStore((state) => state.setPatientData);
@@ -28,7 +31,7 @@ function Intake() {
     initialPatientData.gender !== "" &&
     initialNotes.trim() !== "";
 
-  function handleStart() {
+  async function handleSessionCreation() {
     if (!canProceed) return;
 
     setLoading(true);
@@ -43,28 +46,34 @@ function Intake() {
 
     addToFiles(files);
 
-    const docId = sessionStorage.getItem("doctorId");
-    const patientId = crypto.randomUUID();
-    const sessionId = crypto.randomUUID();
-
-    console.log("PATIENT CONTEXT:", {
-      ...initialPatientData,
-      initialNotes,
-    });
-    console.log("PATIENT FILES:", files);
-
-    sessionStorage.removeItem("sessionId");
-    sessionStorage.removeItem("patientId");
-    sessionStorage.setItem("sessionId", sessionId);
-    sessionStorage.setItem("patientId", patientId);
-
-    setPatientId(patientId);
-
-    setLoading(false);
-
-    navigate(`/dashboard/${patientId}/${docId}/${sessionId}`, {
-      state: { fromIntake: true },
-    });
+    try {
+      const data = await createNewSession(
+        doctorId,
+        initialPatientData.patientName,
+        initialPatientData.age,
+        initialPatientData.gender,
+        initialNotes,
+      );
+      if (!data) {
+        toast.error("Session Creation Failed!");
+        return;
+      }
+      if (data.message === "User Error") {
+        toast.error(data.detail);
+        return;
+      }
+      toast.success("Session created!");
+      setPatientId(data.pat_id);
+      sessionStorage.removeItem("sessionId");
+      sessionStorage.removeItem("patientId");
+      sessionStorage.setItem("sessionId", data.id);
+      sessionStorage.setItem("patientId", data.pat_id);
+      navigate(`/dashboard/${doctorId}/${data.pat_id}/${data.id}`);
+    } catch (err) {
+      toast.error(err.message ?? "Server error");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -143,11 +152,11 @@ function Intake() {
                 focus:ring-2 focus:ring-indigo-500 text-sm"
               >
                 <option value="">Select</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="non-binary">Non-binary</option>
-                <option value="other">Other</option>
-                <option value="unknown">Unknown</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Non-binary">Non-binary</option>
+                <option value="Other">Other</option>
+                <option value="Unknown">Unknown</option>
               </select>
             </div>
           </div>
@@ -191,7 +200,7 @@ function Intake() {
 
           {/* ACTION BUTTON */}
           <button
-            onClick={handleStart}
+            onClick={handleSessionCreation}
             disabled={!canProceed}
             className={`w-full font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2
               ${

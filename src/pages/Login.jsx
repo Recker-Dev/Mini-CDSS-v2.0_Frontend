@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Activity } from "lucide-react";
+import { authUser } from "../services/auth";
+import { toast } from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,20 +13,28 @@ function Login() {
 
   const canLogin = !loading && email.trim() !== "" && password.trim() !== "";
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault(); // prevents from default action of reload
     if (!canLogin) return;
 
     setLoading(true);
-    const doctorId = crypto.randomUUID();
-    // Placeholder logic for later on API implementation
+    try {
+      const data = await authUser(email, password);
 
-    sessionStorage.removeItem("doctorId");
-    sessionStorage.setItem("doctorId", doctorId);
-    sessionStorage.setItem("doctorName", "Dr. Sarah Chen");
+      if (data.authenticated === false) {
+        toast.error(data.error);
+        return;
+      }
 
-    navigate(`/docDashboard/${doctorId}`);
-    setLoading(false);
+      toast.success("Logged In!");
+      sessionStorage.setItem("doctorId", data.id);
+      sessionStorage.setItem("doctorName", data.name);
+      navigate(`/docDashboard/${data.id}`);
+    } catch (err) {
+      toast.error(err.message ?? "Server error");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
