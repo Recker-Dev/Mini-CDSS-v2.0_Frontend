@@ -9,7 +9,7 @@ export default function ClinicalObservationCard({ tag }) {
   const savingChanges = useSessionStore((state) => state.savingChanges);
 
   const entries = useEvidenceStore(
-    (state) => state.evidence[tag.toLowerCase()],
+    (state) => state.evidences[tag.toLowerCase()],
   );
   const addToEvidence = useEvidenceStore((state) => state.addToEvidence);
   const removeFromEvidence = useEvidenceStore(
@@ -28,12 +28,12 @@ export default function ClinicalObservationCard({ tag }) {
       <div className="flex items-center justify-between mb-3">
         <span
           className={`text-sm font-bold ${
-            tag.toLowerCase() === "positive"
+            tag.toLowerCase() === "positives"
               ? "text-secondary-emerald-text"
               : "text-primary-rose-text"
           } flex items-center gap-1.5`}
         >
-          {tag.toLowerCase() === "positive" ? (
+          {tag.toLowerCase() === "positives" ? (
             <CheckCircle className="w-3.5 h-3.5 text-secondary-emerald-text" />
           ) : (
             <X className="w-3.5 h-3.5 text-primary-rose-text" />
@@ -42,7 +42,7 @@ export default function ClinicalObservationCard({ tag }) {
         </span>
         <span
           className={`text-xs ${
-            tag.toLowerCase() === "positive"
+            tag.toLowerCase() === "positives"
               ? "bg-emerald-50  text-secondary-emerald-text"
               : "bg-rose-50 text-primary-rose-text"
           } px-1.5 rounded-md `}
@@ -107,7 +107,7 @@ export default function ClinicalObservationCard({ tag }) {
             <div key={entryIndex} className="flex items-center gap-2 w-full">
               <div
                 className={`flex-1 flex justify-between items-center p-2 border text-xs rounded-lg cursor-pointer select-all font-medium ${
-                  tag.toLowerCase() === "positive"
+                  tag.toLowerCase() === "positives"
                     ? "bg-secondary-emerald/50 border-emerald-100 text-secondary-emerald-text hover:bg-emerald-100"
                     : "bg-secondary-rose/50 border-rose-100 text-secondary-rose-text hover:bg-rose-100"
                 }`}

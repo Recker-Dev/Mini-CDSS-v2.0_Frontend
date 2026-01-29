@@ -31,8 +31,8 @@ export default function LeftPanel() {
 
         {/* Keeps track of all keypoint observations make during the ongoing diagnosis */}
         {/* Spell-check warning here */} 
-        <ClinicalObservationCard tag="Positive" />
-        <ClinicalObservationCard tag="Negative" />
+        <ClinicalObservationCard tag="Positives" />
+        <ClinicalObservationCard tag="Negatives" />
 
         {/* Keeps track of all previous/new uploaded file and the initial patient data given (editable) */}
         <div

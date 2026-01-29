@@ -1,34 +1,22 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-const defaultPositives = [
-  "Substernal Chest Pain",
-  "Smoker (20pk/yr)",
-  "History of HTN",
-];
-
-const defaultNegatives = [
-  "No Jaw Radiation",
-  "Negative Troponin",
-  "No Diaphoresis",
-];
-
 const useEvidenceStore = create()(
   persist(
     (set, get) => ({
-      evidence: {
-        positive: defaultPositives || [],
-        negative: defaultNegatives || [],
+      evidences: {
+        positives: [],
+        negatives: [],
       },
 
       setEvidences: (newEvidenceObject) => {
         set({
-          evidence: {
-            positive: Array.isArray(newEvidenceObject?.positive)
-              ? newEvidenceObject.positive
+          evidences: {
+            positives: Array.isArray(newEvidenceObject?.positives)
+              ? newEvidenceObject.positives
               : [],
-            negative: Array.isArray(newEvidenceObject?.negative)
-              ? newEvidenceObject.negative
+            negatives: Array.isArray(newEvidenceObject?.negatives)
+              ? newEvidenceObject.negatives
               : [],
           },
         });
@@ -41,9 +29,9 @@ const useEvidenceStore = create()(
           );
         }
         set({
-          evidence: {
-            ...get().evidence,
-            [evidenceType]: [...get().evidence[evidenceType], value],
+          evidences: {
+            ...get().evidences,
+            [evidenceType]: [...get().evidences[evidenceType], value],
           },
         });
       },
@@ -54,9 +42,9 @@ const useEvidenceStore = create()(
           );
         }
         set({
-          evidence: {
-            ...get().evidence,
-            [evidenceType]: get().evidence[evidenceType].filter(
+          evidences: {
+            ...get().evidences,
+            [evidenceType]: get().evidences[evidenceType].filter(
               (_, index) => index !== evidenceIndex,
             ),
           },

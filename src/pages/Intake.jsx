@@ -9,7 +9,7 @@ function Intake() {
   const navigate = useNavigate();
   const { doctorId } = useParams();
 
-  const setpatientNotes = usePatientDataStore((state) => state.setpatientNotes);
+  const setPatientNotes = usePatientDataStore((state) => state.setPatientNotes);
   const setPatientData = usePatientDataStore((state) => state.setPatientData);
   const addToFiles = usePatientDataStore((state) => state.addToFiles);
 
@@ -36,7 +36,7 @@ function Intake() {
 
     setLoading(true);
 
-    setpatientNotes(initialNotes);
+    setPatientNotes(initialNotes);
 
     setPatientData({
       patientName: initialPatientData.patientName,
@@ -59,7 +59,7 @@ function Intake() {
         return;
       }
       if (data.message === "User Error") {
-        toast.error(data.detail);
+        toast(`❌️ ${data.detail}`, { duration: 8000 });
         return;
       }
       toast.success("Session created!");

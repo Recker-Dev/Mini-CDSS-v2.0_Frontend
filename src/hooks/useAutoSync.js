@@ -10,10 +10,10 @@ export default function useAutoSync(interval) {
   const files = usePatientDataStore((state) => state.files);
 
   const positiveEvidences = useEvidenceStore(
-    (state) => state.evidence.positive,
+    (state) => state.evidences.positives,
   );
   const negativeEvidences = useEvidenceStore(
-    (state) => state.evidence.negative,
+    (state) => state.evidences.negatives,
   );
 
   const hypotheses = useReasoningStore((state) => state.hypotheses);

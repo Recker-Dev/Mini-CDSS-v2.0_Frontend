@@ -1,29 +1,23 @@
 import { useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { customScrollbar } from "../../../util/scrollbar";
-
-const defaultAIChat = {
-  id: 1,
-  type: "AI",
-  content:
-    "Analysis complete. I've processed your notes and 0 files. Does the chest pain worsen when taking a deep breath or lying flat?",
-};
+import useChatStore from "../../../store/useChatStore";
 
 export default function ChatPanel({ sessionState }) {
   const [userInput, setUserInput] = useState("");
-  const [chats, setChats] = useState([defaultAIChat]);
+  const chats = useChatStore((state) => state.chats);
+  const addToChats = useChatStore((state) => state.addToChats);
   const scrollRef = useRef(null);
 
   function handleChatSubmission() {
-    setChats((prev) => [
-      ...prev,
-      {
-        id: chats.length,
-        type: "Human",
-        content: userInput,
-      },
-      defaultAIChat,
-    ]);
+    const createDoctorMessage = (content) => ({
+      id: crypto.randomUUID(),
+      sender: "Doctor",
+      content,
+      timestamp: new Date().toISOString(),
+    });
+
+    addToChats(createDoctorMessage(userInput));
     setUserInput("");
   }
 
@@ -39,14 +33,14 @@ export default function ChatPanel({ sessionState }) {
           ref={scrollRef}
           className={`flex-1 min-h-0  p-6 space-y-6  overflow-y-auto ${customScrollbar}`}
         >
-          {chats.map((c, i) => (
+          {chats.map((c) => (
             <div
-              key={i}
-              className={`flex ${c.type === "AI" ? "justify-start" : "justify-end"}`}
+              key={c.id}
+              className={`flex ${c.sender === "AI" ? "justify-start" : "justify-end"}`}
             >
               <div
                 className={`max-w-[80%] p-4 rounded-2xl shadow-sm border ${
-                  c.type === "AI"
+                  c.sender === "AI"
                     ? "bg-white text-primary-slate-text border-slate-200 rounded-tl-none"
                     : "bg-primary-blue text-white border-indigo-500 rounded-tr-none"
                 }`}

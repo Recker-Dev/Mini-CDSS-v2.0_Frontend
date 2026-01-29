@@ -15,8 +15,8 @@ export default function PatientDataCard() {
   const patientNotes = usePatientDataStore(
     (state) => state.patientNotes,
   );
-  const setpatientNotes = usePatientDataStore(
-    (state) => state.setpatientNotes,
+  const setPatientNotes = usePatientDataStore(
+    (state) => state.setPatientNotes,
   );
 
   const fileInputRef = useRef(null);
@@ -112,7 +112,7 @@ export default function PatientDataCard() {
           ${customScrollbar}
         `}
           value={patientNotes}
-          onChange={(e) => setpatientNotes(e.target.value)}
+          onChange={(e) => setPatientNotes(e.target.value)}
           placeholder="Enter patient's initial clinical encouter data; like age, sex, gender, ailments, complaints and any past history etc."
         />
       </div>

@@ -4,15 +4,15 @@ import { persist, createJSONStorage } from "zustand/middleware";
 const usePatientDataStore = create()(
   persist(
     (set, get) => ({
-      patientId: "882-C",
+      patientId: "",
       setPatientId: (patientId) => set({ patientId }),
 
       patientData: {},
       setPatientData: (patientData) =>
         set({ initialPatientData: patientData }),
 
-      patientNotes: "Age 50. Male...",
-      setpatientNotes: (patiendData) =>
+      patientNotes: "",
+      setPatientNotes: (patiendData) =>
         set({ patientNotes: patiendData }),
 
       files: [],
