@@ -47,13 +47,13 @@ export default function RightPanel() {
         <form onSubmit={addDoctorHypothesis} className="px-2 relative">
           {/* Hypothesis Input */}
           <input
-            disabled={!sessionState}
+            disabled={sessionState !== "connected"}
             className="w-full 
             bg-slate-50 border border-slate-200  text-primary-slate-text rounded-lg text-xs
             py-2 px-3  pr-10 mb-3 
             outline-none focus:ring-1 focus:ring-indigo-300 "
             placeholder={
-              sessionState
+              sessionState === "connected"
                 ? "Insert Dr's Hypothesis..."
                 : "Offline..reconnect to add hypothesis"
             }
@@ -62,7 +62,7 @@ export default function RightPanel() {
           />
           {/* Reasoning Textarea */}
           <textarea
-            disabled={!sessionState}
+            disabled={sessionState !== "connected"}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -74,7 +74,7 @@ export default function RightPanel() {
             py-2 px-3 
             outline-none focus:ring-1 focus:ring-indigo-300 resize-none"
             placeholder={
-              sessionState
+              sessionState === "connected"
                 ? "Clinical reasoning / logic behind this hypothesis..."
                 : ""
             }
@@ -84,11 +84,11 @@ export default function RightPanel() {
           />
           {/* Submit Button */}
           <button
-            disabled={!sessionState}
+            disabled={sessionState !== "connected"}
             className={`
             absolute right-4 top-1.5 
             ${
-              sessionState
+              sessionState === "connected"
                 ? "text-primary-blue hover:text-secondary-blue cursor-pointer"
                 : `
                     bg-secondary-slate/70

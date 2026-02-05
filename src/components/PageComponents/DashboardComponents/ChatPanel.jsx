@@ -60,14 +60,14 @@ export default function ChatPanel({ sessionState }) {
         >
           <div className="flex gap-2">
             <input
-              disabled={!sessionState}
+              disabled={sessionState !== "connected"}
               className="flex-1 
             bg-slate-50 text-primary-slate-text border border-slate-200
             rounded-xl px-4 py-3 text-sm
             focus:ring-2 focus:ring-indigo-500 outline-none"
               type="text"
               placeholder={
-                sessionState
+                sessionState === "connected"
                   ? "Submit follow-up findings or ask for reasoning..."
                   : "Offline..reconnect to continue with differential diagnosis"
               }
@@ -80,12 +80,12 @@ export default function ChatPanel({ sessionState }) {
               }}
             />
             <button
-              disabled={!sessionState}
+              disabled={sessionState !== "connected"}
               onClick={handleChatSubmission}
               className={`
                 p-3 rounded-xl shadow-lg transition-colors
                 ${
-                  sessionState
+                  sessionState === "connected"
                     ? "bg-primary-blue text-white hover:bg-indigo-700"
                     : "bg-gray-400 text-gray-200 cursor-not-allowed opacity-60"
                 }`}

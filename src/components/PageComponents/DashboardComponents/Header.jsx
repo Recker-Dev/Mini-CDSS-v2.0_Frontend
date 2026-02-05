@@ -1,13 +1,15 @@
+import { useParams } from "react-router-dom";
 import { Activity, X, ChevronDown, UserCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import useSessionStore from "../../../store/useSessionStore";
-import usePatientDataStore from "../../../store/usePatientDataStore";
+// import usePatientDataStore from "../../../store/usePatientDataStore";
 import ProfileToggle from "../../HeaderComponents/ProfileToggle";
+import { wsService } from "../../../services/wsService";
 
 export default function Header() {
+  const { patientId, _, sessionId } = useParams();
   const sessionState = useSessionStore((state) => state.sessionState);
-  const setSessionState = useSessionStore((state) => state.setSessionState);
-  const patientId = usePatientDataStore((state) => state.patientId);
+  const { connect, disconnect } = wsService;
 
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -21,6 +23,16 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  function handleSessionToggle() {
+    // if connected
+    if (sessionState === "connected" ) {
+      disconnect();
+      return;
+    }
+    // if not connected
+    connect(sessionId);
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm h-16 flex items-center justify-between px-6">
@@ -39,18 +51,18 @@ export default function Header() {
         <div className="flex items-center gap-1.5">
           <span
             className={`px-2 py-0.5 rounded-full text-xs ${
-              sessionState
+              sessionState === "connected"
                 ? "text-secondary-emerald-text bg-secondary-emerald"
                 : "text-primary-rose-text bg-secondary-rose"
             } tracking-tight`}
           >
             <span className="hidden sm:inline">
               {/* big screen */}
-              {sessionState ? "ONLINE" : "OFFLINE"}
+              {sessionState === "connected" ? "ONLINE" : "OFFLINE"}
             </span>
             <span className="inline sm:hidden">
               {/* phone screen */}
-              {sessionState ? "ON" : "OFF"}
+              {sessionState === "connected" ? "ON" : "OFF"}
             </span>
           </span>
           <span className="hidden sm:inline px-2 py-0.5 rounded-full text-xs text-primary-slate-text bg-secondary-slate tracking-tight">
@@ -76,21 +88,21 @@ export default function Header() {
         </div>
         {/* Session Button */}
         <button
-          onClick={() => setSessionState(!sessionState)}
+          onClick={() => handleSessionToggle()}
           className={`text-sm font-black text-slate-400 ${
-            sessionState
+            sessionState === "connected"
               ? "hover:text-primary-rose-text"
               : "hover:text-primary-emerald-text"
           } flex items-center gap-2 transition-colors cursor-pointer`}
         >
-          {sessionState && <X className="w-4 h-4" />}
+          {sessionState === "connected" && <X className="w-4 h-4" />}
           <span className="hidden sm:inline">
             {/* big screen */}
-            {sessionState ? "End Session" : "Start Session"}
+            {sessionState === "connected" ? "End Session" : "Start Session"}
           </span>
           <span className="inline sm:hidden">
             {/* phone screen */}
-            {sessionState ? "End" : "Start"}
+            {sessionState === "connected" ? "End" : "Start"}
           </span>
         </button>
       </div>

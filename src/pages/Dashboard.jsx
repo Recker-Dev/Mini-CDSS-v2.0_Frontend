@@ -13,9 +13,11 @@ import { getSessionDetails } from "../services/session";
 import useEvidenceStore from "../store/useEvidenceStore";
 import usePatientDataStore from "../store/usePatientDataStore";
 import useChatStore from "../store/useChatStore";
+import { wsService } from "../services/wsService";
 
 function Dashboard() {
   const { patientId, doctorId, sessionId } = useParams();
+  const { connect, disconnect } = wsService;
   const navigate = useNavigate();
 
   const sessionState = useSessionStore((state) => state.sessionState);
@@ -27,7 +29,6 @@ function Dashboard() {
   const setPatientNotes = usePatientDataStore((state) => state.setPatientNotes);
   const setChats = useChatStore((state) => state.setChats);
 
-  setPatientId(patientId);
   const swipeHandler = useSwipeable({
     onSwipedLeft: () => {
       setPanelMode("left");
@@ -52,7 +53,9 @@ function Dashboard() {
           navigate(`/docDashboard/${doctorId}`);
           return;
         }
-
+        // Open a ws connection with backend
+        connect(sessionId);
+        setPatientId(patientId);
         setEvidences(data.evidences);
         setPatientNotes(data.pat_note);
         setChats(data.chats);
@@ -62,7 +65,23 @@ function Dashboard() {
         // setLoading(false);
       }
     })();
-  }, [doctorId, sessionId, navigate, setEvidences, setPatientNotes, setChats]);
+
+    return () => {
+      // Disconnect ws when leaving the page
+      disconnect();
+    };
+  }, [
+    doctorId,
+    sessionId,
+    patientId,
+    navigate,
+    connect,
+    disconnect,
+    setPatientId,
+    setEvidences,
+    setPatientNotes,
+    setChats,
+  ]);
 
   useAutoSync(2);
 
@@ -81,7 +100,7 @@ function Dashboard() {
         <div className="hidden lg:block">
           <LeftPanel />
         </div>
-        <ChatPanel sessionState={sessionState} />
+        <ChatPanel sessionState={sessionState === "connected"} />
         <div className="hidden lg:block">
           <RightPanel />
         </div>

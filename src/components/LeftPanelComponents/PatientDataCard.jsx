@@ -21,10 +21,10 @@ export default function PatientDataCard() {
 
   const fileInputRef = useRef(null);
 
-  const canEdit = sessionState && !savingChanges;
+  const canEdit = sessionState === "connected" && !savingChanges;
 
   return (
-    <div className="flex flex-col gap-3 p-4 pr-5.5 border-t border-slate-50 ">
+    <div className="flex flex-col gap-3 p-4 border-t border-slate-50 ">
       <div className="flex items-center justify-between text-xs font-black text-secondary-slate-text uppercase ">
         <div className="flex items-center gap-1.5 ">
           <FileText className="w-3.5 h-3.5" /> Patient Data

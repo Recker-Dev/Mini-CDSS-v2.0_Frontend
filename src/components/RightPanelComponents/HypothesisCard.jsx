@@ -10,7 +10,7 @@ export default function HypothesisCard({ hypothesis }) {
     (state) => state.removeFromHypotheses
   );
 
-  const canEdit = sessionState && !savingChanges;
+  const canEdit = sessionState === "connected" && !savingChanges;
   return (
     <div
       className={`p-4 rounded-xl border transition-all ${

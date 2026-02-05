@@ -18,7 +18,7 @@ export default function ClinicalObservationCard({ tag }) {
 
   const [newUserEntry, setNewUserEntry] = useState("");
 
-  const canEdit = sessionState && !savingChanges;
+  const canEdit = sessionState === "connected" && !savingChanges;
 
   return (
     <div
@@ -68,7 +68,7 @@ export default function ClinicalObservationCard({ tag }) {
             py-2 px-3  pr-10
             outline-none focus:ring-1 focus:ring-indigo-300 "
           placeholder={
-            sessionState
+            sessionState === "connected"
               ? savingChanges
                 ? "Wait until saving finishes.."
                 : "Add a new Observation..."
